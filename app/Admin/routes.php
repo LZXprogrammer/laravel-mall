@@ -24,6 +24,4 @@ Route::group([
     $router->get('address', 'AddressController@index');
     $router->get('address/{id}/edit', 'AddressController@edit');
     $router->put('address/{id}', 'AddressController@update');
-    $router->put('address/city?q=', 'AddressController@city');
-    $router->put('address/area?q=', 'AddressController@area');
 });

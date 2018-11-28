@@ -28,4 +28,22 @@ class Consumer extends Model
     protected $hidden = [
         'password', 'rand'
     ];
+
+    //用户资金
+    public function account()
+    {
+        return $this->belongsTo(ConsumerAccount::class, 'id', 'c_id');
+    }
+
+    //用户地址列表
+    public function address()
+    {
+        return $this->hasMany(ConsumerAccount::class, 'id', 'c_id');
+    }
+
+    //用户银行卡列表
+    public function bank()
+    {
+        return $this->hasMany(ConsumerBank::class,'c_id');
+    }
 }

@@ -170,7 +170,46 @@ class ConsumerController extends Controller
         $show->promote('用户推广码');
         $show->panel()->tools(function ($tools) {
                 $tools->disableDelete();
-            });;
+            });
+        $show->account('用户资金信息', function ($account) {
+            $account->setResource('/admin/consumer');
+            $account->total('用户资金总额');
+            $account->available('用户可用金额');
+            $account->freeze('用户冻结金额');
+            $account->withdraw('用户已提现总金额');
+            $account->market('用户获得分销总金额');
+            $account->market_a('用户获得一级分销金额');
+            $account->market_b('用户获得二级分销金额');
+            $account->market_c('用户获得三级分销金额');
+            $account->panel()->tools(function ($tools) {
+                $tools->disableList();
+                $tools->disableDelete();
+                $tools->disableEdit();
+            });
+        });
+        $show->bank('用户银行卡', function ($bank) {
+            $bank->resource('/admin/comments');
+
+            $bank->id('ID');
+            $bank->bank_name('所属银行')->limit(10);
+            $bank->bank_card('银行卡号');
+            $bank->create_time('添加时间');
+            $bank->is_del('是否删除')->using(['0' => '否', '1' => '是']);
+            $bank->is_default('是否默认')->using(['0' => '否', '1' => '是']);
+            $bank->disableCreateButton();
+            $bank->disableExport();
+            $bank->actions(function ($actions) {
+                $actions->disableView();
+                $actions->disableDelete();
+                $actions->disableEdit();
+            });
+            $bank->tools(function ($tools) {
+                // 禁用批量删除按钮
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
+        });
         return $show;
     }
 }
