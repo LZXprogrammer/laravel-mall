@@ -38,7 +38,7 @@ class Consumer extends Model
     //用户地址列表
     public function address()
     {
-        return $this->hasMany(ConsumerAccount::class, 'id', 'c_id');
+        return $this->hasMany(HarvestAddress::class, 'c_id');
     }
 
     //用户银行卡列表

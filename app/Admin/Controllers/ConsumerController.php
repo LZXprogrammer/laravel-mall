@@ -191,7 +191,7 @@ class ConsumerController extends Controller
             $bank->resource('/admin/comments');
 
             $bank->id('ID');
-            $bank->bank_name('所属银行')->limit(10);
+            $bank->bank_name('所属银行');
             $bank->bank_card('银行卡号');
             $bank->create_time('添加时间');
             $bank->is_del('是否删除')->using(['0' => '否', '1' => '是']);
@@ -204,6 +204,37 @@ class ConsumerController extends Controller
                 $actions->disableEdit();
             });
             $bank->tools(function ($tools) {
+                // 禁用批量删除按钮
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
+        });
+        $show->address('用户地址', function ($address) {
+            $address->resource('/admin/comments');
+
+            $address->id('ID');
+            $address->province_id('省')->as(function ($info) {
+                return DB::table('areas')->where('ad_code', $info)->value('name');
+            });
+            $address->city_id('市')->as(function ($info) {
+                return DB::table('areas')->where('ad_code', $info)->value('name');
+            });;
+            $address->area_id('区')->as(function ($info) {
+                return DB::table('areas')->where('ad_code', $info)->value('name');
+            });;
+            $address->address('添加时间');
+            $address->create_time('添加时间');
+            $address->is_del('是否删除')->using(['0' => '否', '1' => '是']);
+            $address->is_default('是否默认')->using(['0' => '否', '1' => '是']);
+            $address->disableCreateButton();
+            $address->disableExport();
+            $address->actions(function ($actions) {
+                $actions->disableView();
+                $actions->disableDelete();
+                $actions->disableEdit();
+            });
+            $address->tools(function ($tools) {
                 // 禁用批量删除按钮
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
