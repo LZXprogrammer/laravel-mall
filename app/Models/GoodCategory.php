@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConsumerAccount extends Model
+class GoodCategory extends Model
 {
     public $timestamps = false;
     /**
@@ -13,11 +13,11 @@ class ConsumerAccount extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'c_id', 'total', 'available', 'freeze', 'withdraw', 'market', 'market_a', 'market_b', 'market_c'
+        'id', 'name', 'create_time', 'is_del'
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['create_time', 'real_time', 'active_time'];
+    protected $dates = ['create_time'];
 
     /**
      * 隐藏字段

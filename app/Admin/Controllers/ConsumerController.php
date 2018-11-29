@@ -4,7 +4,6 @@ namespace App\Admin\Controllers;
 
 use App\Models\Consumer;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
