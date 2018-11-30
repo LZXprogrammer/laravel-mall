@@ -45,4 +45,16 @@ Route::group([
     $router->put('message_template/{id}', 'MessageTemplateController@update');
     $router->get('message_template/create', 'MessageTemplateController@create');
     $router->post('message_template', 'MessageTemplateController@store');
+    //信用卡列表路由
+    $router->get('credit_card', 'CreditCardController@index');
+    $router->get('credit_card/{id}/edit', 'CreditCardController@edit');
+    $router->put('credit_card/{id}', 'CreditCardController@update');
+    $router->get('credit_card/create', 'CreditCardController@create');
+    $router->post('credit_card', 'CreditCardController@store');
+    //信用卡类别列表路由
+    $router->get('credit_type', 'CreditTypeController@index');
+    $router->get('credit_type/{id}/edit', 'CreditTypeController@edit');
+    $router->put('credit_type/{id}', 'CreditTypeController@update');
+    $router->get('credit_type/create', 'CreditTypeController@create');
+    $router->post('credit_type', 'CreditTypeController@store');
 });

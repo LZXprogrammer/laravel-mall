@@ -2,20 +2,21 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\MessageTemplate;
+use App\Models\CreditCard;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Illuminate\Support\Facades\DB;
 
-class MessageTemplateController extends Controller
+class CreditCardController extends Controller
 {
     //短信模板列表首页
     public function index(Content $content)
     {
         return Admin::content(function (Content $content) {
-            $content->header('短信模板列表');
+            $content->header('信用卡列表');
             $content->body($this->grid());
         });
     }
@@ -23,7 +24,7 @@ class MessageTemplateController extends Controller
     //编辑短信模板
     public function edit($id, Content $content)
     {
-        return $content->header('短信模板信息')->description('编辑')->body($this->form()->edit($id));
+        return $content->header('信用卡信息')->description('编辑')->body($this->form()->edit($id));
     }
 
     //编辑短信模板
@@ -32,17 +33,11 @@ class MessageTemplateController extends Controller
         return $this->form()->update($id);
     }
 
-    //编辑短信模板
-    public function delete($id)
-    {
-        var_dump($id);exit;
-    }
-
     //添加商品短信模板
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建短信模板');
+            $content->header('创建信用卡');
             $content->body($this->form());
         });
     }
@@ -57,10 +52,11 @@ class MessageTemplateController extends Controller
     //获取短信模板数据
     protected function grid()
     {
-        return Admin::grid(MessageTemplate::class, function (Grid $grid) {
+        return Admin::grid(CreditCard::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->name('模板名称');
-            $grid->content('模板内容');
+            $grid->bank_name('所属银行');
+            $grid->credit_type()->name('模板名称');
+            $grid->name('信用卡名称');
             $grid->create_time('添加时间')->display(function ($value) {
                 return date('Y-m-d H:i:s', $value);
             });
@@ -74,9 +70,32 @@ class MessageTemplateController extends Controller
     protected function form()
     {
         // 创建一个表单
-        return Admin::form(MessageTemplate::class, function (Form $form) {
-            $form->text('name', '模板名称')->rules('required');
-            $form->textarea('content', '模板内容')->rules('required')->help('模板内容自定义，需要验证码部分请用{code}替换；需要用户手机号部分请用{mobile}替换；需要用户姓名部分请用{real_name}替换；需要昵称部分请用{nick_name}替换；');
+        return Admin::form(CreditCard::class, function (Form $form) {
+            $form->select('bank_name', '所属银行')->options(function ($id) {
+                $bank = DB::table('banks')->where('is_del', 1)->select('abbreviation','name')->get();
+
+                $array = [];
+                if ($bank) {
+                    foreach ($bank as $k => $v) {
+                        $array[$v->abbreviation] = $v->name;
+                    }
+                }
+                return $array;
+            });
+            $form->select('type', '信用卡分类')->options(function ($id) {
+                $type = DB::table('credit_types')->where('is_del', 1)->select('id','name')->get();
+
+                $array = [];
+                if ($type) {
+                    foreach ($type as $k => $v) {
+                        $array[$v->id] = $v->name;
+                    }
+                }
+                return $array;
+            });
+            $form->text('name', '信用卡名称')->rules('required');
+            $form->editor('content', '信用卡详情')->rules('required');
+            $form->number('desc', '排序')->rules('required');
             $form->hidden('create_time')->default(time());
 
             // 定义事件回调，当模型即将保存时会触发这个回调

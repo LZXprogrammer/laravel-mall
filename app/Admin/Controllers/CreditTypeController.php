@@ -9,7 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
-class MessageTemplateController extends Controller
+class CreditTypeController extends Controller
 {
     //短信模板列表首页
     public function index(Content $content)
