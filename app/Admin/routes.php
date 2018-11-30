@@ -37,4 +37,12 @@ Route::group([
     $router->put('category/{id}', 'CategoryController@update');
     $router->get('category/create', 'CategoryController@create');
     $router->post('category', 'CategoryController@store');
+    //短信列表路由
+    $router->get('message', 'MessageController@index');
+    //短信列表路由
+    $router->get('message_template', 'MessageTemplateController@index');
+    $router->get('message_template/{id}/edit', 'MessageTemplateController@edit');
+    $router->put('message_template/{id}', 'MessageTemplateController@update');
+    $router->get('message_template/create', 'MessageTemplateController@create');
+    $router->post('message_template', 'MessageTemplateController@store');
 });

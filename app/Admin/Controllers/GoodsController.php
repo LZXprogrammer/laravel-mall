@@ -10,7 +10,6 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class GoodsController extends Controller
 {
@@ -68,7 +67,7 @@ class GoodsController extends Controller
             $grid->vender('厂家');
             $grid->category('产品类别')->display(function ($value) {
                 return DB::table('good_categories')->where('id', $value)->value('name');
-            });;
+            });
             $grid->serial_number('产品序列号');
             $grid->price('产品价格');
             $grid->create_time('创建时间')->display(function ($value) {
