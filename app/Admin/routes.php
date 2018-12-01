@@ -57,4 +57,10 @@ Route::group([
     $router->put('credit_type/{id}', 'CreditTypeController@update');
     $router->get('credit_type/create', 'CreditTypeController@create');
     $router->post('credit_type', 'CreditTypeController@store');
+    //文章列表路由
+    $router->get('article', 'ArticleController@index');
+    $router->get('article/{id}/edit', 'ArticleController@edit');
+    $router->put('article/{id}', 'ArticleController@update');
+    $router->get('article/create', 'ArticleController@create');
+    $router->post('article', 'ArticleController@store');
 });
