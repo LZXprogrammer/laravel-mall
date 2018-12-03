@@ -17,7 +17,19 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
+
 Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
     Route::post('/doLogin', 'LoginController@index')->middleware('mobile');
     Route::post('/doRegister', 'LoginController@register')->middleware('mobile');
+});
+
+Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
+    Route::get('/banner', 'CreditController@creditBanner');
+    Route::get('/list', 'CreditController@creditList');
+    Route::get('/detail/{id}', 'CreditController@creditDetail');
+});
+
+Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
+    Route::get('/banner', 'HomeController@homeBanner');
+    Route::get('/goodlists', 'HomeController@homeGoodLists');
 });
