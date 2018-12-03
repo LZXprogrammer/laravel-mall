@@ -18,3 +18,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', 'Api\LoginController@index')->middleware('mobile');
+
+Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
+
+    Route::get('/banner', 'CreditController@creditBanner');
+    Route::get('/list', 'CreditController@creditList');
+    Route::get('/detail/{id}', 'CreditController@creditDetail');
+
+});
+
+Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
+
+    Route::get('/banner', 'HomeController@homeBanner');
+    Route::get('/goodlists', 'HomeController@homeGoodLists');
+    
+});

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CreditType extends Model
+class Area extends Model
 {
     public $timestamps = false;
     /**
@@ -13,7 +13,7 @@ class CreditType extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'is_del', 'is_enable'
+        'id', 'name', 'ad_code', 'city_code', 'pinyin', 'level'
     ];
 
     // 表示 create_time 是一个日期字段
@@ -24,7 +24,5 @@ class CreditType extends Model
      *
      * @var array
      */
-    protected $hidden = ['create_time'];
-
-
+    protected $hidden = [];
 }

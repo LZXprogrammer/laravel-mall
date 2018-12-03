@@ -13,7 +13,7 @@ class CreditCard extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'bank_name', 'type', 'name', 'content', 'create_time', 'desc'
+        'id', 'bank_name', 'type', 'name', 'content', 'create_time', 'sort', 'picture', 'blurb', 'apply_num'
     ];
 
     // 表示 create_time 是一个日期字段
