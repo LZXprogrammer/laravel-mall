@@ -13,8 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
-Route::post('/login', 'Api\LoginController@index')->middleware('mobile');
+Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
+    Route::post('/doLogin', 'LoginController@index')->middleware('mobile');
+    Route::post('/doRegister', 'LoginController@register')->middleware('mobile');
+});

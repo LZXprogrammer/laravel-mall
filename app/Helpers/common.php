@@ -10,8 +10,7 @@ function returnJsonMsg($code, $message, $data) {
         'data'=>$data
     );
     arrayRecursive($result, 'urlencode', true);
-    echo urldecode(json_encode($result));
-    exit;
+    return urldecode(json_encode($result));
 }
 
 function arrayRecursive(&$array, $function, $apply_to_keys_also = false)
@@ -42,4 +41,14 @@ function arrayRecursive(&$array, $function, $apply_to_keys_also = false)
         }
     }
     $recursive_counter--;
+}
+
+//生成随机数
+function randFloat($length = 6){
+    return rand(pow(10,($length-1)), pow(10,$length)-1);
+}
+
+function getPromote( $length = 8)
+{
+    return substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),0,$length);
 }

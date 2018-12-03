@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class LoginLog extends Model
 {
     public $timestamps = false;
     /**
@@ -13,11 +13,11 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'mobile', 't_id', 'code', 'message', 'send_time', 'overdue_time', 'type'
+        'id', 'c_id', 'login_time', 'login_ip',
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['send_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段
@@ -25,10 +25,4 @@ class Message extends Model
      * @var array
      */
     protected $hidden = [];
-
-
-    public function message_template()
-    {
-        return $this->belongsTo(MessageTemplate::class);
-    }
 }

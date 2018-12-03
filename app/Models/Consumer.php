@@ -13,21 +13,19 @@ class Consumer extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'mobile', 'nick_name', 'real_name', 'id_number', 'avatar',
-        'is_active', 'level_a', 'level_b', 'level_c', 'create_time', 'real_time', 'active_time'
+        'id', 'mobile', 'nick_name', 'password', 'rand', 'real_name', 'id_number', 'avatar',
+        'is_active', 'level_a', 'level_b', 'level_c', 'create_time', 'real_time', 'active_time', 'promote', 'last_login_time'
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['create_time', 'real_time', 'active_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'rand'
-    ];
+    protected $hidden = [];
 
     //用户资金
     public function account()

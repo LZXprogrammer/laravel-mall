@@ -17,7 +17,7 @@ class ConsumerAccount extends Model
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['create_time', 'real_time', 'active_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段
