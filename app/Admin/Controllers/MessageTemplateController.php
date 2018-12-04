@@ -76,7 +76,7 @@ class MessageTemplateController extends Controller
         // 创建一个表单
         return Admin::form(MessageTemplate::class, function (Form $form) {
             $form->text('name', '模板名称')->rules('required');
-            $form->textarea('content', '模板内容')->rules('required')->help('模板内容自定义，需要验证码部分请用{code}替换；需要用户手机号部分请用{mobile}替换；需要用户姓名部分请用{real_name}替换；需要昵称部分请用{nick_name}替换；');
+            $form->textarea('content', '模板内容')->rules('required')->help('模板内容自定义，需要验证码部分请用{code}替换；需要用户手机号部分请用{mobile}替换；需要用户姓名部分请用{real_name}替换；');
             $form->hidden('create_time')->default(time());
 
             // 定义事件回调，当模型即将保存时会触发这个回调

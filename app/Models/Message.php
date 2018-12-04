@@ -13,11 +13,11 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'mobile', 't_id', 'code', 'message', 'send_time', 'overdue_time', 'type'
+        'id', 'mobile', 'message_template_id', 'code', 'message', 'send_time', 'overdue_time', 'is_use', 'type'
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['send_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段

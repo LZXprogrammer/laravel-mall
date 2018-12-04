@@ -209,7 +209,6 @@ class LoginController extends Controller
         //获取参数
         $old_pwd = $request->post('old_pwd');
         $new_pwd = $request->post('new_pwd');
-        $repeat_pwd = $request->post('repeat_pwd');
         $mobile = $request->post('mobile');
         $code = $request->post('code');
 

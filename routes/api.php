@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-
+//登陆注册模块路由
 Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
     Route::post('/doLogin', 'LoginController@index')->middleware(['mobile', 'password']);
     Route::post('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
@@ -35,3 +35,6 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'HomeController@homeBanner');
     Route::get('/goodlists', 'HomeController@homeGoodLists');
 });
+
+//发送短信路由
+Route::post('/sendSms', 'Api\SmsController@index');
