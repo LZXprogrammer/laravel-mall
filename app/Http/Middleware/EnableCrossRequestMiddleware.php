@@ -34,7 +34,7 @@ class EnableCrossRequestMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        $response->header('Access-Control-Allow-Headers', 'application/x-www-form-urlencoded, Authorization, Accept');
+        $response->header('Access-Control-Allow-Headers', 'Origin, application/x-www-form-urlencoded, Content-Type, Cookie, X-CSRF-TOKEN, Authorization, Accept');
         // response allow return Authorization header
         $response->header('Access-Control-Expose-Headers', 'Authorization');
         $response->header('Access-Control-Allow-Origin', '*');
