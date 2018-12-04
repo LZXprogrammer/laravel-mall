@@ -46,12 +46,12 @@ class LoginController extends Controller
         $log->login_time = time();
         $log->login_ip = $request->getClientIp();
         $bool = $log->save();
-
-        if($user && $bool) {
-            return returnJsonMsg('1', '登陆成功', '');
-        }else{
+        var_dump($user);
+        var_dump($bool);
+        if(!$user || !$bool) {
             return returnJsonMsg('0', '登陆失败', '');
         }
+        return returnJsonMsg('1', '登陆成功', '');
     }
 
     /**
