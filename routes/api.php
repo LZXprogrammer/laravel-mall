@@ -19,10 +19,10 @@ use Illuminate\Http\Request;
 
 
 Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
-    Route::post('/doLogin', 'LoginController@index')->middleware('mobile');
-    Route::post('/doRegister', 'LoginController@register')->middleware('mobile');
-    Route::post('/upPassWord', 'LoginController@updatePassword')->middleware('mobile');
-    Route::post('/fgPassWord', 'LoginController@forgotPassword')->middleware('mobile');
+    Route::post('/doLogin', 'LoginController@index')->middleware(['mobile', 'password']);
+    Route::post('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
+    Route::post('/upPassWord', 'LoginController@updatePassword')->middleware(['mobile', 'upPwd', 'code']);
+    Route::post('/fgPassWord', 'LoginController@forgotPassword')->middleware(['mobile', 'fgPwd', 'code']);
 });
 
 Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {

@@ -46,8 +46,6 @@ class LoginController extends Controller
         $log->login_time = time();
         $log->login_ip = $request->getClientIp();
         $bool = $log->save();
-        var_dump($user);
-        var_dump($bool);
         if(!$user || !$bool) {
             return returnJsonMsg('0', '登陆失败', '');
         }
@@ -158,7 +156,7 @@ class LoginController extends Controller
     {
         //获取参数
         $mobile = $request->post('mobile');
-        $password = $request->post('new_password');
+        $password = $request->post('new_pwd');
         $code = $request->post('code');
 
         $ui = $this->userExist($mobile);
@@ -232,10 +230,7 @@ class LoginController extends Controller
         if($ui->password != md5(md5($old_pwd).$ui->rand)) {
             return returnJsonMsg('0', '用户输入旧密码不正确', '');
         }
-        //判断两次密码是否正确
-        if($new_pwd != $repeat_pwd) {
-            return returnJsonMsg('0', '用户输入两次密码不一样', '');
-        }
+
 
         //开启事务
         DB::beginTransaction();
@@ -252,27 +247,5 @@ class LoginController extends Controller
         //提交数据
         DB::commit();
         return returnJsonMsg('1', '用户修改密码成功', '');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
-     * 用户是否存在
-     *
-     * @param  mobile      string   用户手机号
-     * @return
-     */
-    private function userExist($mobile)
-    {
-        return Consumer::where('mobile', $mobile)->first();
     }
 }
