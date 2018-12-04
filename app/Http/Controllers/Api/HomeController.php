@@ -31,27 +31,36 @@ class HomeController extends Controller
      */
     public function homeGoodLists(Request $request)
     {      
-        // $city_code = $request->has('city_code') ? $request->get('city_code') : 0;
-        // if($city_code){
-        //     $area = Area::where('city_code', $city_code)->first();
-        // }
+        $ad_code = $request->has('ad_code') ? $request->get('ad_code') : 0;
+        if($ad_code){
+            $area = Area::where('ad_code', $ad_code)->first();
+        }
 
-        // // 1：企业  2：个人
-        // $sold_type = $request->has('sold_type') ? $request->get('sold_type') : 1;
-        // $sort_type = $request->has('sort_type') ? $request->get('sort_type') : 1;
+        
+// var_dump($area->id);die;
+// return $area;
+        // 1：企业  2：个人
+        $sold_type = $request->has('sold_type') ? $request->get('sold_type') : 1;
+        $sort_type = $request->has('sort_type') ? $request->get('sort_type') : 1;
 
-        // // 1 综合  2 价格  3 销量
-        // switch ($sort_type) {
-        //     case 1:
+        // 1 综合  2 价格  3 销量
+        switch ($sort_type) {
+            case 1:
                 
-        //         break;
-        //     case 2:
-        //         $data_lists = Good::where('city_code', $city_code)->get();
-        //         break;
-        //     default:
-        //         # code...
-        //         break;
-        // }
+                break;
+            case 2:
+                $data_lists = Good::where('apply_city', 'like', '%'.$area->id.',%')->get();
+                // var_dump($data_lists);die;
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        return $data_lists;
+
+
+
     }
 
     /**
