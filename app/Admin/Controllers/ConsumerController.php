@@ -78,9 +78,15 @@ class ConsumerController extends Controller
                     return $mobile->mobile;
                 }
             });
-            $grid->create_time('注册时间');
-            $grid->real_time('实名时间');
-            $grid->active_time('激活时间');
+            $grid->create_time('注册时间')->display(function ($value) {
+                return date('Y-m-d H:i:s', $value);
+            });
+            $grid->real_time('实名时间')->display(function ($value) {
+                return date('Y-m-d H:i:s', $value);
+            });
+            $grid->active_time('激活时间')->display(function ($value) {
+                return date('Y-m-d H:i:s', $value);
+            });
 
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
@@ -112,8 +118,6 @@ class ConsumerController extends Controller
 
             // 定义事件回调，当模型即将保存时会触发这个回调
             $form->saving(function (Form $form) {
-                // 修改上传目录
-
             });
             $form->tools(function (Form\Tools $tools) {
                 // 去掉`删除`按钮
