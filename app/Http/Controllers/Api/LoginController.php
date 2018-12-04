@@ -248,26 +248,4 @@ class LoginController extends Controller
         DB::commit();
         return returnJsonMsg('1', '用户修改密码成功', '');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
-     * 用户是否存在
-     *
-     * @param  mobile      string   用户手机号
-     * @return
-     */
-    private function userExist($mobile)
-    {
-        return Consumer::where('mobile', $mobile)->first();
-    }
 }

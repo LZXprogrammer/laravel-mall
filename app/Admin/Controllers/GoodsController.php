@@ -139,6 +139,11 @@ class GoodsController extends Controller
 
             // 定义事件回调，当模型即将保存时会触发这个回调
             $form->saving(function (Form $form) {
+                foreach ($form->apply_city as $k => $v) {
+                    if($v == '-1') {
+                        $form->apply_city = ['0' => '-1'];
+                    }
+                }
             });
             $form->tools(function (Form\Tools $tools) {
                 // 去掉`删除`按钮
