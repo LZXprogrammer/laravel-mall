@@ -52,9 +52,6 @@ class AddressController extends Controller
             });
             $grid->address('详细地址');
             $grid->create_time('添加时间');
-            $grid->is_del('是否删除')->display(function ($value) {
-                return ($value==1) ? '是' : '否';
-            });
             $grid->is_default('是否默认')->display(function ($value) {
                 return ($value==1) ? '是' : '否';
             });
