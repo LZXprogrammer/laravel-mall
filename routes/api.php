@@ -35,3 +35,7 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'HomeController@homeBanner');
     Route::get('/goodlists', 'HomeController@homeGoodLists');
 });
+
+Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
+    Route::get('/detail', 'GoodsDetailController@goodsDetail');
+});
