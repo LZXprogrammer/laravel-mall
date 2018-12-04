@@ -49,7 +49,7 @@ class HomeController extends Controller
                 
                 break;
             case 2:
-                $data_lists = Good::where('apply_city', 'like', '%'.$area->id.',%')->get();
+                $data_lists = Good::where('apply_city', 'like', '%'.$area->id.'%')->get();
                 // var_dump($data_lists);die;
                 break;
             default:
