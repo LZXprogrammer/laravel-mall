@@ -164,7 +164,7 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            return returnJsonMsg('0', '登陆用户不存在', '');
+            return returnJsonMsg('0', '用户不存在', '');
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
@@ -182,7 +182,10 @@ class LoginController extends Controller
         //生成随机数
         $user = Consumer::where('mobile', $mobile)->update(['password' => $new_password]);
 
-        if(!$user) {
+        //更改信息状态
+        $u_sms = Message::where(['mobile' => $mobile, 'code' => $code])->update(['is_use' => '1']);
+
+        if(!$user || !$u_sms) {
             //回滚数据
             DB::rollBack();
             return returnJsonMsg('0', '用户修改密码失败', '');
@@ -215,8 +218,40 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            return returnJsonMsg('0', '登陆用户不存在', '');
+            return returnJsonMsg('0', '用户不存在', '');
         }
+        //判断用户短信
+        $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
+        if(empty($sms)) {
+            return returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
+        }
+        if($sms->overdue_time < time()) {
+            return returnJsonMsg('0', '用户短信验证码已过期', '');
+        }
+        //判断旧密码是否正确
+        if($ui->password != md5(md5($old_pwd).$ui->rand)) {
+            return returnJsonMsg('0', '用户输入旧密码不正确', '');
+        }
+        //判断两次密码是否正确
+        if($new_pwd != $repeat_pwd) {
+            return returnJsonMsg('0', '用户输入两次密码不一样', '');
+        }
+
+        //开启事务
+        DB::beginTransaction();
+        //生成新密码
+        $new_password = md5(md5($new_pwd).$ui->rand);
+        //生成随机数
+        $user = Consumer::where('mobile', $mobile)->update(['password' => $new_password]);
+
+        if(!$user) {
+            //回滚数据
+            DB::rollBack();
+            return returnJsonMsg('0', '用户修改密码失败', '');
+        }
+        //提交数据
+        DB::commit();
+        return returnJsonMsg('1', '用户修改密码成功', '');
     }
 
     /**
