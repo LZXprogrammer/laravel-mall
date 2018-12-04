@@ -36,6 +36,8 @@ class HomeController extends Controller
         $ad_code = $request->has('ad_code') ? $request->post('ad_code') : 0;
         if($ad_code){
             $area = Area::where('ad_code', $ad_code)->first();
+        }else{
+            return ['code' => 0, 'msg' => 'ad_code 参数必传'];
         }
 
         // 1：企业  2：个人
