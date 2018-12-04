@@ -111,11 +111,11 @@ class GoodsController extends Controller
             $form->number('total', '总数量')->placeholder('不填默认为产品数量无限制');
             $form->currency('courier_fees', '快递费')->symbol('￥')->rules('required');
             $form->multipleSelect('apply_city','适用城市')->options(function ($name) {
-                $bank = DB::table('areas')->where('level', 2)->select('id','name')->get();
+                $bank = DB::table('areas')->where('level', 2)->select('ad_code','name')->get();
                 $array['-1'] = '全部城市';
                 if ($bank) {
                     foreach ($bank as $k => $v) {
-                        $array[$v->id] = $v->name;
+                        $array[$v->ad_code] = $v->name;
                     }
                 }
                 return $array;
