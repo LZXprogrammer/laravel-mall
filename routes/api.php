@@ -55,6 +55,10 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/addressDel', 'UserController@delAddress')->middleware(['address']);
         Route::post('/realName', 'UserController@realNameAuth')->middleware(['realNameAuth']);
     });
+});
 
+Route::group(['prefix' => 'cart', 'namespace' => 'Api'], function () {
+    Route::post('/add', 'CartController@cartAdd');
+    Route::post('/list', 'CartController@cartList');
 });
 
