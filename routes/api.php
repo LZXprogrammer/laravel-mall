@@ -42,3 +42,8 @@ Route::post('/sendSms', 'Api\SmsController@index');
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
     Route::get('/detail', 'GoodsDetailController@goodsDetail');
 });
+
+Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
+    Route::get('/home', 'UserController@index')->middleware(['user']);
+});
+
