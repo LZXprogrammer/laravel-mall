@@ -50,7 +50,8 @@ class LoginController extends Controller
         if(!$user || !$bool) {
             returnJsonMsg('0', '登陆失败', '');
         }
-        returnJsonMsg('1', '登陆成功', '');
+        $info['uid'] = $ui->id;
+        returnJsonMsg('1', '登陆成功', $info);
     }
 
     /**

@@ -106,7 +106,7 @@ class UserController extends Controller
         $id = $request->post('id');
 
         //修改数据状态
-        $address = ['id_del' => '0'];
+        $address = ['is_del' => '0'];
         $res = HarvestAddress::where('id', $id)->update($address);
 
         //判断是否成功
