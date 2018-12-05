@@ -9,8 +9,9 @@ function returnJsonMsg($code, $message, $data) {
         'message'=>$message,
         'data'=>$data
     );
-    arrayRecursive($result, 'urlencode', true);
-    return urldecode(json_encode($result));
+    // arrayRecursive($result, 'urlencode', true);
+    // return urldecode(json_encode($result));
+    return json_encode($result);
 }
 
 function arrayRecursive(&$array, $function, $apply_to_keys_also = false)

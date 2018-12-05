@@ -29,6 +29,6 @@ class GoodSku extends Model
 
     public function good()
     {
-        return $this->belongsTo(Good::class, 'p_id');
+        return $this->belongsTo(Good::class, 'g_id');
     }
 }
