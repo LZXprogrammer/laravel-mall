@@ -247,4 +247,9 @@ class LoginController extends Controller
         DB::commit();
         return returnJsonMsg('1', '用户修改密码成功', '');
     }
+
+    //检查用户是否存在
+    public function userExist($mobile) {
+        return Consumer::where('mobile', $mobile)->first();
+    }
 }

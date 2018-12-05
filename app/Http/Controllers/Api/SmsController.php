@@ -15,7 +15,7 @@ class SmsController extends Controller
 {
     protected $_sms;
 
-    public function __Construct(SmsVerificationNotification $smsVerificationNotification){
+    public function __construct(SmsVerificationNotification $smsVerificationNotification){
         $this->_sms = $smsVerificationNotification;
     }
     /**
