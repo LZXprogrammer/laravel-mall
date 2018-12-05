@@ -61,3 +61,9 @@ Route::group(['prefix' => 'cart', 'namespace' => 'Api'], function () {
 
 });
 
+Route::group(['prefix' => 'order', 'namespace' => 'Api'], function () {
+
+    Route::post('/query', 'OrderController@queryOrder');
+
+});
+
