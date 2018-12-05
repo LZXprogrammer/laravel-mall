@@ -29,6 +29,7 @@ Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'CreditController@creditBanner');
     Route::get('/list', 'CreditController@creditList');
     Route::get('/detail/{id}', 'CreditController@creditDetail');
+    Route::get('/comment/{id}', 'CreditController@creditComment');
 });
 
 Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
@@ -40,5 +41,6 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
 Route::post('/sendSms', 'Api\SmsController@index');
 
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
-    Route::get('/detail', 'GoodsDetailController@goodsDetail');
+    Route::get('/detail/{id}', 'GoodsDetailController@goodsDetail');
+    Route::get('/comment/{id}', 'GoodsDetailController@goodsComment');
 });
