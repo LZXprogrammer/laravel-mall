@@ -1,6 +1,6 @@
 <?php
 
-function returnJsonMsg($code, $message, $data) {
+function returnJsonMsg($code, $message, $data='') {
     if(!is_numeric($code)){
         return '';
     }

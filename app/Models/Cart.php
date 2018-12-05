@@ -13,7 +13,8 @@ class Cart extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'c_id', 'g_sku_id', 'amount', 'create_time'
+        'id', 'c_id', 'g_sku_id', 'g_id', 'amount', 'name', 'create_time', 
+        'show_pic', 'category', 'price', 'trad_channel'
     ];
 
     // 表示 create_time 是一个日期字段
@@ -35,7 +36,7 @@ class Cart extends Model
     }
 
     /**
-     * 模型关联 商品
+     * 模型关联 商品sku
      */
     public function goodsku()
     {
