@@ -45,7 +45,12 @@ Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
     Route::get('/comment/{id}', 'GoodsDetailController@goodsComment');
 });
 
-Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
-    Route::post('/home', 'UserController@index')->middleware(['user']);
+
+Route::group(['middleware' => 'user'], function () {
+
+    Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
+        Route::post('/home', 'UserController@index');
+    });
+
 });
 
