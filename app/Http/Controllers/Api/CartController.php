@@ -15,10 +15,9 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function cartAdd(Request $request)
-    {
-        // $uid = $request->session()->get('uid');
-        // return 11;
-        $uid = 4;
+    {   
+        $uid = $request->session()->get('uid');
+
         $g_sku_id  = $request->has('g_sku_id') ? $request->input('g_sku_id') : 0;
 
         if($g_sku_id){
@@ -45,9 +44,11 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cartList()
-    {
-        $cart_lists = Cart::get();
+    public function cartList(Request $request)
+    {   
+        $uid = $request->session()->get('uid');
+
+        $cart_lists = Cart::where('c_id', $uid)->get();
 
         return $cart_lists;
     }
