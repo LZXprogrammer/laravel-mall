@@ -6,9 +6,17 @@ use App\Models\Consumer;
 use App\Models\HarvestAddress;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\realNameAuthNotification;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    protected $_realNameAuth;
+
+    public function __construct(realNameAuthNotification $realNameAuthNotification){
+        $this->_realNameAuth = $realNameAuthNotification;
+    }
     /**
      * 个人中心主页
      *
@@ -116,9 +124,38 @@ class UserController extends Controller
     public function realNameAuth(Request $request)
     {
         //获取参数
-        $real_name = $request->post('realName');
+        $real_name = $request->post('real_name');
         $id_card = $request->post('idCard');
 
+        //开启事务
+        DB::beginTransaction();
 
+        $user = Consumer::where('id', session('uid'))->first();
+        if(!empty($user['real_name']) && !empty($user['id_number']) && !empty($user['real_time'])) {
+            returnJsonMsg('0', '用户已实名', '');
+        }
+
+        $update = [
+            'real_name' => $real_name,
+            'id_number' => $id_card,
+            'real_time' => time()
+        ];
+        $res = Consumer::where('id', session('uid'))->update($update);
+
+        if(!$res) {
+            DB::rollBack();
+            returnJsonMsg('0', '实名失败', '');
+        }
+
+        if(Config::get('systems.environment') == 'production') {
+            $res = $this->_realNameAuth->idCard($real_name, $id_card);
+            if ($res != '1') {
+                DB::rollBack();
+                returnJsonMsg('0', $res, '');
+            }
+        }
+        //提交数据
+        DB::commit();
+        returnJsonMsg('1', '实名成功', '');
     }
 }
