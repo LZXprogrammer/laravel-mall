@@ -50,15 +50,16 @@ Route::group(['middleware' => 'user'], function () {
 
     Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
         Route::post('/home', 'UserController@index');
-    }); 
-
+        Route::post('/address', 'UserController@addressList');
+        Route::post('/addressEdit', 'UserController@editAddress')->middleware(['addressEdit']);
+        Route::post('/addressDel', 'UserController@delAddress')->middleware(['address']);
+        Route::post('/realName', 'UserController@realNameAuth')->middleware(['realNameAuth']);
+    });
 });
 
 Route::group(['prefix' => 'cart', 'namespace' => 'Api'], function () {
-
     Route::post('/add', 'CartController@cartAdd');
     Route::post('/list', 'CartController@cartList');
-
 });
 
 Route::group(['prefix' => 'order', 'namespace' => 'Api'], function () {
