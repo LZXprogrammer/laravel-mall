@@ -47,7 +47,6 @@ Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
 
 
 Route::group(['middleware' => 'user'], function () {
-
     Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
         Route::post('/home', 'UserController@index');
         Route::post('/address', 'UserController@addressList');
