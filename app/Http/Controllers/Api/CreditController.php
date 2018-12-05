@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Article;
 use App\Models\CreditCard;
+use App\Models\Comment;
 
 class CreditController extends Controller
 {
@@ -68,9 +69,13 @@ class CreditController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function creditComment($id)
+    public function creditComment(Request $request, $id)
     {
-       // 
+        // $uid = $request->session()->get('uid');
+        $uid = 4;
+        // return $uid;
+        $comments = Comment::where('credit_id', $id)->where('c_id', $uid)->with('consumer')->get();
+        return $comments;
     }
 
 }

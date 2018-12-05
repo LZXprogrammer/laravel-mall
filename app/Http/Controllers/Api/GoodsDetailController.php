@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Good;
+use App\Models\Comment;
 
 class GoodsDetailController extends Controller
 {
@@ -14,9 +15,9 @@ class GoodsDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function goodsDetail(Request $request)
+    public function goodsDetail(Request $request, $id)
     {
-        $id = $request->has('id') ? $request->get('id') : 0;
+        // $id = $request->has('id') ? $request->get('id') : 0;
 
         $goods = Good::find($id)->first();
         // 获取商品 sku
@@ -31,42 +32,11 @@ class GoodsDetailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function goodsComment(Request $request)
+    public function goodsComment(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $uid = 4;
+        // return $uid;
+        $comments = Comment::where('g_id', $id)->where('c_id', $uid)->with('consumer')->get();
+        return $comments;
     }
 }
