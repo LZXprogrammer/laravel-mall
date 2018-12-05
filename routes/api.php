@@ -44,6 +44,6 @@ Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
 });
 
 Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
-    Route::get('/home', 'UserController@index')->middleware(['user']);
+    Route::post('/home', 'UserController@index')->middleware(['user']);
 });
 
