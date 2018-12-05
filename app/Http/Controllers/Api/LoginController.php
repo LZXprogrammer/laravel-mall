@@ -140,9 +140,11 @@ class LoginController extends Controller
             DB::rollBack();
             returnJsonMsg('0', '注册失败', '');
         }
+
+        $info['uid'] = $c_id;
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '注册成功', '');
+        returnJsonMsg('1', '注册成功', $info);
     }
 
     /**
