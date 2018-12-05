@@ -13,11 +13,11 @@ class HarvestAddress extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'c_id', 'province_id', 'city_id', 'area_id', 'address', 'create_time', 'is_del', 'is_default'
+        'id', 'c_id', 'province_id', 'city_id', 'area_id', 'address', 'create_time', 'is_del', 'is_default', 'phone', 'name'
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['create_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段
@@ -25,4 +25,24 @@ class HarvestAddress extends Model
      * @var array
      */
     protected $hidden = [];
+
+    public function province()
+    {
+        return $this->belongsTo(Area::class, 'province_id', 'ad_code');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(Area::class, 'city_id','ad_code');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id','ad_code');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(Consumer::class, 'c_id');
+    }
 }

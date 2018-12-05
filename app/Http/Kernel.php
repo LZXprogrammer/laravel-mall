@@ -67,7 +67,9 @@ class Kernel extends HttpKernel
         'password' => \App\Http\Middleware\CheckPassword::class,
         'code' => \App\Http\Middleware\CheckCode::class,
         'upPwd' => \App\Http\Middleware\CheckOldPassword::class,
-        'user' => \App\Http\Middleware\CheckUser::class,
+        'realNameAuth' => \App\Http\Middleware\CheckRealNameAuth::class,
+        'address' => \App\Http\Middleware\CheckAddress::class,
+        'addressEdit' => \App\Http\Middleware\CheckAddressEdit::class,
     ];
 
     /**

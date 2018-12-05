@@ -50,6 +50,10 @@ Route::group(['middleware' => 'user'], function () {
 
     Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
         Route::post('/home', 'UserController@index');
+        Route::post('/address', 'UserController@addressList');
+        Route::post('/addressEdit', 'UserController@editAddress')->middleware(['addressEdit']);
+        Route::post('/addressDel', 'UserController@delAddress')->middleware(['address']);
+        Route::post('/realName', 'UserController@realNameAuth')->middleware(['realNameAuth']);
     });
 
 });
