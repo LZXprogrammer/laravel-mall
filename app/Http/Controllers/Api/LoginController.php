@@ -50,7 +50,8 @@ class LoginController extends Controller
         if(!$user || !$bool) {
             returnJsonMsg('0', '登陆失败', '');
         }
-        returnJsonMsg('1', '登陆成功', '');
+        $info['uid'] = $ui->id;
+        returnJsonMsg('1', '登陆成功', $info);
     }
 
     /**
@@ -140,11 +141,9 @@ class LoginController extends Controller
             DB::rollBack();
             returnJsonMsg('0', '注册失败', '');
         }
-
-        $info['uid'] = $c_id;
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '注册成功', $info);
+        returnJsonMsg('1', '注册成功', '');
     }
 
     /**
