@@ -37,19 +37,19 @@ class SmsController extends Controller
             $send_time = $send->send_time+60;
             //避免用户太频繁发送短信
             if($send_time >= time()) {
-                return returnJsonMsg('0', '用户发送短信较频繁，请稍等60s后再发送', '');
+                returnJsonMsg('0', '用户发送短信较频繁，请稍等60s后再发送', '');
             }
             $res = Message::where('id' , $send->id)->update(['overdue_time' => time()+300]);
             if(!$res) {
                 DB::rollback();
-                return returnJsonMsg('0', '用户发送短信失败', '');
+                returnJsonMsg('0', '用户发送短信失败', '');
             }
             $message = $send->message;
         }else{
             $content = MessageTemplate::where('id', $type)->value('content');
 
             if(empty($content)) {
-                return returnJsonMsg('0', '用户非法操作', '');
+                returnJsonMsg('0', '用户非法操作', '');
             }
             //获取发送短信
             $info = $this->editText($mobile, $content);
@@ -70,7 +70,7 @@ class SmsController extends Controller
         }
         if(!$res) {
             DB::rollback();
-            return returnJsonMsg('0', '用户发送短信失败', '');
+            returnJsonMsg('0', '用户发送短信失败', '');
         }
 
         if(Config::get('systems.environment') == 'production') {
@@ -78,13 +78,13 @@ class SmsController extends Controller
             $waugh = $this->_sms->waugh($mobile, $message);
             if ($waugh != '1') {
                 DB::rollBack();
-                return returnJsonMsg('0', $waugh, '');
+                returnJsonMsg('0', $waugh, '');
             }
         }
 
         //提交数据
         DB::commit();
-        return returnJsonMsg('1', '发送成功', '');
+        returnJsonMsg('1', '发送成功', '');
     }
 
     //拼装发送短信

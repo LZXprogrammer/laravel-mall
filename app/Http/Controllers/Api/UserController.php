@@ -30,7 +30,7 @@ class UserController extends Controller
         $info['real_times'] = $user->real_time;
         $info['active_times'] = $user->active_time;
         $info['promotes'] = $user->promote;
-        return returnJsonMsg('1', '请求成功', $info);
+        returnJsonMsg('1', '请求成功', $info);
     }
 
     /**
@@ -58,7 +58,7 @@ class UserController extends Controller
             }
         }
 
-        return returnJsonMsg('1', '请求成功', $list);
+        returnJsonMsg('1', '请求成功', $list);
     }
 
     /**
@@ -84,9 +84,9 @@ class UserController extends Controller
         }
         //判断是否成功
         if(!$res) {
-            return returnJsonMsg('0', '请求失败', '');
+            returnJsonMsg('0', '请求失败', '');
         }
-        return returnJsonMsg('1', '请求成功', '');
+        returnJsonMsg('1', '请求成功', '');
     }
 
     /**
@@ -103,9 +103,9 @@ class UserController extends Controller
 
         //判断是否成功
         if(!$res) {
-            return returnJsonMsg('0', '请求失败', '');
+            returnJsonMsg('0', '请求失败', '');
         }
-        return returnJsonMsg('1', '请求成功', '');
+        returnJsonMsg('1', '请求成功', '');
     }
 
     /**
