@@ -16,7 +16,7 @@ class CheckNewPassword
     public function handle($request, Closure $next)
     {
         if(empty($request->new_pwd)) {
-            return response()->json(['code' => '0', 'message' => '用户新密码不能为空', 'data' => '']);
+            return response()->json(['code' => 0, 'message' => '用户新密码不能为空', 'data' => '']);
         }
 
         return $next($request);

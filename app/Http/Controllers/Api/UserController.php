@@ -39,7 +39,7 @@ class UserController extends Controller
         $info['active_times'] = $user->active_time;
         $info['promotes'] = $user->promote;
 
-        return ['code' => '1', 'message' => '请求成功', 'data' => $info];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $info];
     }
 
     /**
@@ -67,7 +67,7 @@ class UserController extends Controller
             }
         }
 
-        return ['code' => '1', 'message' => '请求成功', 'data' => $list];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $list];
     }
 
     /**
@@ -93,9 +93,9 @@ class UserController extends Controller
         }
         //判断是否成功
         if(!$res) {
-            return ['code' => '0', 'message' => '请求失败', 'data' => ''];
+            return ['code' => 0, 'message' => '请求失败', 'data' => ''];
         }
-        return ['code' => '1', 'message' => '请求成功', 'data' => ''];
+        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
     }
 
     /**
@@ -112,9 +112,9 @@ class UserController extends Controller
 
         //判断是否成功
         if(!$res) {
-            return ['code' => '0', 'message' => '请求失败', 'data' => ''];
+            return ['code' => 0, 'message' => '请求失败', 'data' => ''];
         }
-        return ['code' => '1', 'message' => '请求成功', 'data' => ''];
+        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
     }
 
     /**
@@ -133,7 +133,7 @@ class UserController extends Controller
 
         $user = Consumer::where('id', session('uid'))->first();
         if(!empty($user['real_name']) && !empty($user['id_number']) && !empty($user['real_time'])) {
-            return ['code' => '0', 'message' => '用户已实名', 'data' => ''];
+            return ['code' => 0, 'message' => '用户已实名', 'data' => ''];
         }
 
         $update = [
@@ -145,18 +145,18 @@ class UserController extends Controller
 
         if(!$res) {
             DB::rollBack();
-            return ['code' => '0', 'message' => '实名失败', 'data' => ''];
+            return ['code' => 0, 'message' => '实名失败', 'data' => ''];
         }
 
         if(Config::get('systems.environment') == 'production') {
             $res = $this->_realNameAuth->idCard($real_name, $id_card);
             if ($res != '1') {
                 DB::rollBack();
-                return ['code' => '0', 'message' => $res, 'data' => ''];
+                return ['code' => 0, 'message' => $res, 'data' => ''];
             }
         }
         //提交数据
         DB::commit();
-        return ['code' => '1', 'message' => '实名成功', 'data' => ''];
+        return ['code' => 1, 'message' => '实名成功', 'data' => ''];
     }
 }

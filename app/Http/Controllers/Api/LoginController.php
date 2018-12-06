@@ -28,12 +28,12 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            return ['code' => '0', 'message' => '登陆用户不存在', 'data' => ''];
+            return ['code' => 0, 'message' => '登陆用户不存在', 'data' => ''];
         }
         //验证登陆密码是否正确
         $verify_password = md5(md5($password).$ui->rand);
         if($verify_password !== $ui->password) {
-            return ['code' => '0', 'message' => '登陆密码不正确', 'data' => ''];
+            return ['code' => 0, 'message' => '登陆密码不正确', 'data' => ''];
         }
 
         //更新用户登陆信息
@@ -48,12 +48,12 @@ class LoginController extends Controller
         $log->login_ip = $request->getClientIp();
         $bool = $log->save();
         if(!$user || !$bool) {
-            return ['code' => '0', 'message' => '登陆失败', 'data' => ''];
+            return ['code' => 0, 'message' => '登陆失败', 'data' => ''];
         }
 
         $info['uid'] = $ui->id;
 
-        return ['code' => '1', 'message' => '登陆成功', 'data' => $info];
+        return ['code' => 1, 'message' => '登陆成功', 'data' => $info];
     }
 
     /**
@@ -77,15 +77,15 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(!empty($ui)) {
-            return ['code' => '0', 'message' => '登陆用户已存在', 'data' => ''];
+            return ['code' => 0, 'message' => '登陆用户已存在', 'data' => ''];
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            return ['code' => '0', 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
+            return ['code' => 0, 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
         }
         if($sms->overdue_time < time()) {
-            return ['code' => '0', 'message' => '用户短信验证码已过期', 'data' => ''];
+            return ['code' => 0, 'message' => '用户短信验证码已过期', 'data' => ''];
         }
 
         $level_a = 0;
@@ -141,11 +141,11 @@ class LoginController extends Controller
         if(!$consumer || !$account || !$u_sms) {
             //回滚数据
             DB::rollBack();
-            return ['code' => '0', 'message' => '注册失败', 'data' => ''];
+            return ['code' => 0, 'message' => '注册失败', 'data' => ''];
         }
         //提交数据
         DB::commit();
-        return ['code' => '1', 'message' => '注册成功', 'data' => ''];
+        return ['code' => 1, 'message' => '注册成功', 'data' => ''];
     }
 
     /**
@@ -166,15 +166,15 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            return ['code' => '0', 'message' => '用户不存在', 'data' => ''];
+            return ['code' => 0, 'message' => '用户不存在', 'data' => ''];
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            return ['code' => '0', 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
+            return ['code' => 0, 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
         }
         if($sms->overdue_time < time()) {
-            return ['code' => '0', 'message' => '用户短信验证码已过期', 'data' => ''];
+            return ['code' => 0, 'message' => '用户短信验证码已过期', 'data' => ''];
         }
 
         //开启事务
@@ -190,11 +190,11 @@ class LoginController extends Controller
         if(!$user || !$u_sms) {
             //回滚数据
             DB::rollBack();
-            return ['code' => '0', 'message' => '用户修改密码失败', 'data' => ''];
+            return ['code' => 0, 'message' => '用户修改密码失败', 'data' => ''];
         }
         //提交数据
         DB::commit();
-        return ['code' => '1', 'message' => '用户修改密码成功', 'data' => ''];
+        return ['code' => 1, 'message' => '用户修改密码成功', 'data' => ''];
     }
 
 
@@ -219,19 +219,19 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            return ['code' => '0', 'message' => '用户不存在', 'data' => ''];
+            return ['code' => 0, 'message' => '用户不存在', 'data' => ''];
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            return ['code' => '0', 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
+            return ['code' => 0, 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
         }
         if($sms->overdue_time < time()) {
-            return ['code' => '0', 'message' => '用户短信验证码已过期', 'data' => ''];
+            return ['code' => 0, 'message' => '用户短信验证码已过期', 'data' => ''];
         }
         //判断旧密码是否正确
         if($ui->password != md5(md5($old_pwd).$ui->rand)) {
-            return ['code' => '0', 'message' => '用户输入旧密码不正确', 'data' => ''];
+            return ['code' => 0, 'message' => '用户输入旧密码不正确', 'data' => ''];
         }
 
 
@@ -245,11 +245,11 @@ class LoginController extends Controller
         if(!$user) {
             //回滚数据
             DB::rollBack();
-            return ['code' => '0', 'message' => '用户修改密码失败', 'data' => ''];
+            return ['code' => 0, 'message' => '用户修改密码失败', 'data' => ''];
         }
         //提交数据
         DB::commit();
-        return ['code' => '1', 'message' => '用户修改密码成功', 'data' => ''];
+        return ['code' => 1, 'message' => '用户修改密码成功', 'data' => ''];
     }
 
     //检查用户是否存在
