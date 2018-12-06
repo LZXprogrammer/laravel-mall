@@ -54,7 +54,7 @@ class LoginController extends Controller
 
         $info['uid'] = $ui->id;
 
-        // 用户默认收货地址,若是新用户,默认地址为空
+        // 返回用户默认收货地址,若是新用户,默认地址为空
         $address = HarvestAddress::where('c_id', $ui->id)->where('is_default', 1)->first();
         if(!$address){
 
@@ -123,9 +123,9 @@ class LoginController extends Controller
         if($promote) {
             $p_user = Consumer::where('promote', $promote)->first();
             if($p_user) {
-                $level_c = $p_user->level_b;
-                $level_b = $p_user->level_a;
-                $level_a = $p_user->id;
+                $level_c = $p_user->id;
+                $level_b = $p_user->level_c;
+                $level_a = $p_user->level_b;
             }
         }
 
