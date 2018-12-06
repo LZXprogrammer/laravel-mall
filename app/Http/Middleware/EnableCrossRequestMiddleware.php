@@ -28,9 +28,9 @@ class EnableCrossRequestMiddleware
             $response->header('Access-Control-Allow-Origin', '*');
             $response->header('Access-Control-Allow-Headers', 'Origin, application/x-www-form-urlencoded, Content-Type, Cookie, X-CSRF-TOKEN, Authorization, Accept');
             // response allow return Authorization header
-            // $response->header('Access-Control-Expose-Headers', 'Authorization');
+            $response->header('Access-Control-Expose-Headers', 'Authorization');
             $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-            $response->header('Access-Control-Max-Age', '3628800');
+//            $response->header('Access-Control-Max-Age', '3628800');
 
             // 如果下面为 true 时，'Access-Control-Allow-Origin' 的值不能为 * ，只能是请求域名
             // $response->header('Access-Control-Allow-Credentials', 'false');
