@@ -64,6 +64,7 @@ Route::group(['middleware' => 'user'], function () {
 
         Route::post('/address', 'OrderController@orderAddress');
         Route::post('/goods', 'OrderController@orderGoods');
+        Route::post('/submit', 'OrderController@orderSubmit');
 
     });
 });

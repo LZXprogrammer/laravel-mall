@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'address' => \App\Http\Middleware\CheckAddress::class,
         'addressEdit' => \App\Http\Middleware\CheckAddressEdit::class,
         'user' => \App\Http\Middleware\CheckUser::class,
+        'orderSubmit' => \App\Http\Middleware\CheckOrderSubmit::class,
     ];
 
     /**
