@@ -52,7 +52,7 @@ class HomeController extends Controller
                                         $query->where('apply_city', 'like', '%'.$area->ad_code.'%')
                                               ->orWhere('apply_city', '-1');
                                     })
-                                    ->select(['id', 'name', 'price', 'sold_out', 'category'])
+                                    ->select(['id', 'name', 'price', 'sold_out', 'category', 'show_pic'])
                                     ->orderBy('sold_out', 'desc')
                                     ->orderBy('price', 'asc')
                                     ->get();
@@ -63,7 +63,7 @@ class HomeController extends Controller
                                         $query->where('apply_city', 'like', '%'.$area->ad_code.'%')
                                               ->orWhere('apply_city', '-1');
                                     })
-                                    ->select(['id', 'name', 'price', 'sold_out', 'category'])
+                                    ->select(['id', 'name', 'price', 'sold_out', 'category', 'show_pic'])
                                     ->orderBy('price', 'asc')
                                     ->get();
                 break;
@@ -73,7 +73,7 @@ class HomeController extends Controller
                                         $query->where('apply_city', 'like', '%'.$area->ad_code.'%')
                                               ->orWhere('apply_city', '-1');
                                     })
-                                    ->select(['id', 'name', 'price', 'sold_out', 'category'])
+                                    ->select(['id', 'name', 'price', 'sold_out', 'category', 'show_pic'])
                                     ->orderBy('sold_out', 'desc')
                                     ->get();
                 break;
