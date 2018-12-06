@@ -50,7 +50,10 @@ class LoginController extends Controller
         if(!$user || !$bool) {
             return ['code' => '0', 'message' => '登陆失败', 'data' => ''];
         }
-        return ['code' => '1', 'message' => '登陆成功', 'data' => ''];
+
+        $info['uid'] = $ui->id;
+
+        return ['code' => '1', 'message' => '登陆成功', 'data' => $info];
     }
 
     /**

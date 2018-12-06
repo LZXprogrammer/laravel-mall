@@ -1,18 +1,5 @@
 <?php
 
-function returnJsonMsg($code, $message, $data='') {
-    if(!is_numeric($code)){
-        return '';
-    }
-    $result=array(
-        'code'=>$code,
-        'message'=>$message,
-        'data'=>$data
-    );
-    return json_encode($result);
-}
-
-
 //生成随机数
 function randFloat($length = 6){
     return rand(pow(10,($length-1)), pow(10,$length)-1);
