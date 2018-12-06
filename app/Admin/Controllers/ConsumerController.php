@@ -54,29 +54,14 @@ class ConsumerController extends Controller
             $grid->is_active('是否激活')->display(function ($value) {
                 return ($value==1) ? '是' : '否';
             });
-            $grid->level_a('一级分销')->display(function ($value) {
-                if($value == 0) {
-                    return '无';
-                }else{
-                    $mobile = Consumer::where('id', $value)->first();
-                    return $mobile->mobile;
-                }
+            $grid->level_a('一级分销代理人')->display(function ($value) {
+                return ($value == 0) ? '无' : $value;
             });
-            $grid->level_b('二级分销')->display(function ($value) {
-                if($value == 0) {
-                    return '无';
-                }else{
-                    $mobile = Consumer::where('id', $value)->first();
-                    return $mobile->mobile;
-                }
+            $grid->level_b('二级分销代理人')->display(function ($value) {
+                return ($value == 0) ? '无' : $value;
             });
-            $grid->level_c('三级分销')->display(function ($value) {
-                if($value == 0) {
-                    return '无';
-                }else{
-                    $mobile = Consumer::where('id', $value)->first();
-                    return $mobile->mobile;
-                }
+            $grid->level_c('三级分销代理人')->display(function ($value) {
+                return ($value == 0) ? '无' : $value;
             });
             $grid->create_time('注册时间')->display(function ($value) {
                 return date('Y-m-d H:i:s', $value);
@@ -108,12 +93,12 @@ class ConsumerController extends Controller
     {
         // 创建一个表单
         return Admin::form(Consumer::class, function (Form $form) {
-            $form->text('nick_name', '用户昵称')->rules('required');
-            $form->text('real_name', '用户真实姓名')->rules('required');
-            $form->text('id_number', '用户身份证号')->rules('required');
-            $form->image('avatar', '用户头像')->rules('required|image');
+            $form->text('nick_name', '用户昵称');
+            $form->text('real_name', '用户真实姓名');
+            $form->text('id_number', '用户身份证号');
+            $form->image('avatar', '用户头像')->rules('image');
             $form->radio('is_active', '是否激活')->options(['1' => '是', '0'=> '否'])->default('0');
-            $form->text('promote', '推广码')->rules('required');
+            $form->text('promote', '推广码');
 
 
             // 定义事件回调，当模型即将保存时会触发这个回调
@@ -143,29 +128,14 @@ class ConsumerController extends Controller
         $show->real_name('真实姓名');
         $show->id_number('身份证号');
         $show->is_active('是否激活')->using(['0' => '否', '1' => '是']);
-        $show->level_a('一级分销用户')->as(function ($info) {
-            if($info == 0) {
-                return '无';
-            }else{
-                $mobile = Consumer::where('id', $info)->first();
-                return $mobile->mobile;
-            }
+        $show->level_a('一级分销代理人')->as(function ($value) {
+            return ($value == 0) ? '无' : $value;
         });
-        $show->level_b('二级分销用户')->as(function ($info) {
-            if($info == 0) {
-                return '无';
-            }else{
-                $mobile = Consumer::where('id', $info)->first();
-                return $mobile->mobile;
-            }
+        $show->level_b('二级分销代理人')->as(function ($value) {
+            return ($value == 0) ? '无' : $value;
         });
-        $show->level_c('三级分销用户')->as(function ($info) {
-            if($info == 0) {
-                return '无';
-            }else{
-                $mobile = Consumer::where('id', $info)->first();
-                return $mobile->mobile;
-            }
+        $show->level_c('三级分销代理人')->as(function ($value) {
+            return ($value == 0) ? '无' : $value;
         });
         $show->create_time('创建时间');
         $show->real_time('实名时间');
@@ -181,9 +151,9 @@ class ConsumerController extends Controller
             $account->freeze('用户冻结金额');
             $account->withdraw('用户已提现总金额');
             $account->market('用户获得分销总金额');
-            $account->market_a('用户获得一级分销金额');
-            $account->market_b('用户获得二级分销金额');
-            $account->market_c('用户获得三级分销金额');
+            $account->market_a('用户获得一级分销代理人金额');
+            $account->market_b('用户获得二级分销代理人金额');
+            $account->market_c('用户获得三级分销代理人金额');
             $account->panel()->tools(function ($tools) {
                 $tools->disableList();
                 $tools->disableDelete();

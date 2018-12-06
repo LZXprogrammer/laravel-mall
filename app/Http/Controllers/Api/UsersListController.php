@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Consumer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Config;
 
 class UsersListController extends Controller
 {
@@ -15,19 +17,24 @@ class UsersListController extends Controller
     public function index(Request $request)
     {
         //获取参数
-        $level = $request->post('level');
-        $page = $request->post('page');
+        $level = $request->get('level');
 
-        //进行判断是几级会员
+        $page = Config::get('systems.defaultPage');
+
+        $info = array();
+        //进行判断是几级分销代理
         switch ($level) {
             case '1':
-
+                $info = Consumer::where('level_a', session('uid'))->simplePaginate($page);
                 break;
             case '2':
+                $info = Consumer::where('level_b', session('uid'))->simplePaginate($page);
                 break;
             case '3':
+                $info = Consumer::where('level_c', session('uid'))->simplePaginate($page);
                 break;
         }
+        return ['code' => '1', 'message' => '请求成功', 'data' => $info];
     }
 
 
