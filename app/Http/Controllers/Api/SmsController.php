@@ -84,7 +84,8 @@ class SmsController extends Controller
 
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '发送成功', '');
+//        returnJsonMsg('1', '发送成功', '');
+        return ['code' => '1','message'=>'发送成功','data'=>''];
     }
 
     //拼装发送短信
