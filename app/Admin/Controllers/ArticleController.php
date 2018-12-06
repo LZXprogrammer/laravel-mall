@@ -79,6 +79,7 @@ class ArticleController extends Controller
             $form->text('name', '文章名称')->rules('required');
             $form->text('blurb', '文章简介')->rules('required');
             $form->image('picture', '展示图片')->rules('image');
+            $form->image('picture')->move('public/upload/');
             $form->select('type', '文章类别')->options(['1' => 'banner', '2' => '指南链接']);
             $form->url('url', '跳转url');
             $form->editor('content', '文章内容');

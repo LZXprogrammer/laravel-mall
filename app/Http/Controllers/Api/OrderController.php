@@ -42,7 +42,6 @@ class OrderController extends Controller
     public function orderGoods(Request $request)
     {
         $g_sku_id = $request->has('g_sku_id') ? $request->input('g_sku_id') : 0;
-        $g_id = $request->has('g_id') ? $request->input('g_id') : 0;
 
         $goods_sku = GoodSku::where('id', $g_sku_id)->select(['id','g_id','trad_channel','extra'])->first();
         $goods = $goods_sku->good()->select(['name', 'category', 'courier_fees'])->first();
