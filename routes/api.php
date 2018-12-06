@@ -38,7 +38,7 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
 });
 
 //发送短信路由
-Route::get('/sendSms', 'Api\SmsController@index');
+Route::post('/sendSms', 'Api\SmsController@index');
 
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
     Route::get('/detail/{id}', 'GoodsDetailController@goodsDetail');
