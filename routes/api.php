@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 //登陆注册模块路由
 Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
     Route::post('/doLogin', 'LoginController@index')->middleware(['mobile', 'password']);
-    Route::post('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
+    Route::get('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
     Route::post('/upPassWord', 'LoginController@updatePassword')->middleware(['mobile', 'upPwd', 'code']);
     Route::post('/fgPassWord', 'LoginController@forgotPassword')->middleware(['mobile', 'fgPwd', 'code']);
 });

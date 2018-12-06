@@ -50,8 +50,7 @@ class LoginController extends Controller
         if(!$user || !$bool) {
             returnJsonMsg('0', '登陆失败', '');
         }
-        $info['uid'] = $ui->id;
-        returnJsonMsg('1', '登陆成功', $info);
+        returnJsonMsg('1', '登陆成功', '');
     }
 
     /**
@@ -66,10 +65,10 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         //获取参数
-        $mobile = $request->post('mobile');
-        $password = $request->post('password');
-        $code = $request->post('code');
-        $promote = $request->post('promote');
+        $mobile = $request->get('mobile');
+        $password = $request->get('password');
+        $code = $request->get('code');
+        $promote = $request->get('promote');
 
         //进行逻辑判断
         $ui = $this->userExist($mobile);
@@ -80,10 +79,10 @@ class LoginController extends Controller
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
+            return returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
         }
         if($sms->overdue_time < time()) {
-            returnJsonMsg('0', '用户短信验证码已过期', '');
+            return returnJsonMsg('0', '用户短信验证码已过期', '');
         }
 
         $level_a = 0;
@@ -139,11 +138,11 @@ class LoginController extends Controller
         if(!$consumer || !$account || !$u_sms) {
             //回滚数据
             DB::rollBack();
-            returnJsonMsg('0', '注册失败', '');
+            return returnJsonMsg('0', '注册失败', '');
         }
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '注册成功', '');
+        return returnJsonMsg('1', '注册成功', '');
     }
 
     /**
@@ -164,15 +163,15 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            returnJsonMsg('0', '用户不存在', '');
+            return returnJsonMsg('0', '用户不存在', '');
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
+            return returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
         }
         if($sms->overdue_time < time()) {
-            returnJsonMsg('0', '用户短信验证码已过期', '');
+            return returnJsonMsg('0', '用户短信验证码已过期', '');
         }
 
         //开启事务
@@ -188,11 +187,11 @@ class LoginController extends Controller
         if(!$user || !$u_sms) {
             //回滚数据
             DB::rollBack();
-            returnJsonMsg('0', '用户修改密码失败', '');
+            return returnJsonMsg('0', '用户修改密码失败', '');
         }
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '用户修改密码成功', '');
+        return returnJsonMsg('1', '用户修改密码成功', '');
     }
 
 
@@ -217,19 +216,19 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(empty($ui)) {
-            returnJsonMsg('0', '用户不存在', '');
+            return returnJsonMsg('0', '用户不存在', '');
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
         if(empty($sms)) {
-            returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
+            return returnJsonMsg('0', '用户输入短信验证码不存在或不正确', '');
         }
         if($sms->overdue_time < time()) {
-            returnJsonMsg('0', '用户短信验证码已过期', '');
+            return returnJsonMsg('0', '用户短信验证码已过期', '');
         }
         //判断旧密码是否正确
         if($ui->password != md5(md5($old_pwd).$ui->rand)) {
-            returnJsonMsg('0', '用户输入旧密码不正确', '');
+            return returnJsonMsg('0', '用户输入旧密码不正确', '');
         }
 
 
@@ -243,11 +242,11 @@ class LoginController extends Controller
         if(!$user) {
             //回滚数据
             DB::rollBack();
-            returnJsonMsg('0', '用户修改密码失败', '');
+            return returnJsonMsg('0', '用户修改密码失败', '');
         }
         //提交数据
         DB::commit();
-        returnJsonMsg('1', '用户修改密码成功', '');
+        return returnJsonMsg('1', '用户修改密码成功', '');
     }
 
     //检查用户是否存在
