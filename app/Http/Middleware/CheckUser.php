@@ -16,15 +16,15 @@ class CheckUser
     public function handle($request, Closure $next)
     {
         if(empty($request->uid)) {
-            returnJsonMsg('0', '缺少必要参数', '');
+            return response()->json(['code' => '0', 'message' => '缺少必要参数', 'data' => '']);
         }
 
         if(empty(session('uid'))) {
-            returnJsonMsg('0', '用户登陆保持已失效，请重新登陆', '');
+            return response()->json(['code' => '0', 'message' => '用户登陆保持已失效，请重新登陆', 'data' => '']);
         }
 
         if(session('uid') != $request->uid) {
-            returnJsonMsg('0', '用户ID不正确，非法操作', '');
+            return response()->json(['code' => '0', 'message' => '用户ID不正确，非法操作', 'data' => '']);
         }
 
 

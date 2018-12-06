@@ -16,7 +16,7 @@ class CheckCode
     public function handle($request, Closure $next)
     {
         if(empty($request->code)) {
-            returnJsonMsg('0', '用户手机验证码不能为空', '');
+            return response()->json(['code' => '0', 'message' => '用户手机验证码不能为空', 'data' => '']);
         }
 
         return $next($request);

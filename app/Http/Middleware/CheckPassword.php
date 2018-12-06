@@ -16,7 +16,7 @@ class CheckPassword
     public function handle($request, Closure $next)
     {
         if(empty($request->password)) {
-            returnJsonMsg('0', '用户密码不能为空', '');
+            return response()->json(['code' => '0', 'message' => '用户密码不能为空', 'data' => '']);
         }
 
         return $next($request);

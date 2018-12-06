@@ -16,7 +16,7 @@ class CheckAddress
     public function handle($request, Closure $next)
     {
         if(empty($request->id) || !is_numeric($request->id)) {
-            returnJsonMsg('0', '缺少必要参数', '');
+            return response()->json(['code' => '0', 'message' => '缺少必要参数', 'data' => '']);
         }
 
         return $next($request);
