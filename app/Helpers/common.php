@@ -9,8 +9,7 @@ function returnJsonMsg($code, $message, $data='') {
         'message'=>$message,
         'data'=>$data
     );
-    echo json_encode($result);
-    exit;
+    return json_encode($result);
 }
 
 
