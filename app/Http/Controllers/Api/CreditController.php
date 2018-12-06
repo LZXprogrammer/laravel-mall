@@ -20,7 +20,7 @@ class CreditController extends Controller
     {
         $credit_banner = Article::select(['picture', 'url'])->whereType(2)->get();
 
-        return $credit_banner;
+        return ['code' => 1, 'message' => '请求信用卡banner图成功', 'data' => $credit_banner];
     }
 
     /**
@@ -35,18 +35,17 @@ class CreditController extends Controller
 
         switch ($type) {
             case 'hot':
-                $hot_credits = CreditCard::where('is_hot', 1)->with('credit_type')->get();
-                return $hot_credits;
+                $data_lists = CreditCard::where('is_hot', 1)->with('credit_type')->get();
                 break;
             case 'new':
-                $new_credits = CreditCard::where('is_new', 1)->with('credit_type')->get();
-                return $new_credits;
+                $data_lists = CreditCard::where('is_new', 1)->with('credit_type')->get();
                 break;
 
             default:
                 # code...
                 break;
         }
+        return ['code' => 1, 'message' => '请求信用卡列表成功', 'data' => $data_lists];
     }
 
     /**
@@ -58,8 +57,12 @@ class CreditController extends Controller
     public function creditDetail($id)
     {
         $credir_detail = CreditCard::whereId($id)->first();
+
+        if(!$credir_detail){
+            return ['code' => 0, 'message' => '请求信用卡不存在', 'data' => ''];
+        }
         
-        return $credir_detail;
+        return ['code' => 1, 'message' => '请求信用卡详情成功', 'data' => $credir_detail];
     }
 
     /**
@@ -71,11 +74,11 @@ class CreditController extends Controller
      */
     public function creditComment(Request $request, $id)
     {
-        // $uid = $request->session()->get('uid');
-        $uid = 4;
-        // return $uid;
+        $uid = $request->session()->get('uid');
+
         $comments = Comment::where('credit_id', $id)->where('c_id', $uid)->with('consumer')->get();
-        return $comments;
+
+        return ['code' => 1, 'message' => '请求信用卡评论成功', 'data' => $comments];
     }
 
 }

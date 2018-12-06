@@ -17,26 +17,31 @@ class GoodsDetailController extends Controller
      */
     public function goodsDetail(Request $request, $id)
     {
-        // $id = $request->has('id') ? $request->get('id') : 0;
-
         $goods = Good::find($id)->first();
+
+        if(!$goods){
+            return ['code' => 0, 'message' => '请求商品不存在', 'data' => ''];
+        }
+
         // 获取商品 sku
         $goods_sku = $goods->sku->first();
 
-        return $goods;
+        return ['code' => 1, 'message' => '请求商品详情成功', 'data' => $goods];
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param  Int  $id 商品id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function goodsComment(Request $request, $id)
     {
-        $uid = 4;
-        // return $uid;
+        $uid = $request->session()->get('uid');
+
         $comments = Comment::where('g_id', $id)->where('c_id', $uid)->with('consumer')->get();
-        return $comments;
+
+        return ['code' => 1, 'message' => '请求商品评论成功', 'data' => $comments];
     }
 }

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\HarvestAddress;
 use App\Models\Good;
 use App\Models\GoodSku;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class OrderController extends Controller
 {
@@ -30,7 +32,7 @@ class OrderController extends Controller
         $address->city = $city->toArray()['name'];
         $address->area = $area->toArray()['name'];
 
-        return $address;
+        return ['code' => '1', 'message' => '获取默认收获地址成功', 'data' => $address];
     }
 
     /**
@@ -46,11 +48,13 @@ class OrderController extends Controller
         $goods_sku = GoodSku::where('id', $g_sku_id)->select(['id','g_id','trad_channel','extra'])->first();
         $goods = $goods_sku->good()->select(['name', 'category', 'courier_fees'])->first();
 
-        return array_merge($goods_sku->toArray(), $goods->toArray());
+        $info = array_merge($goods_sku->toArray(), $goods->toArray());
+
+        return ['code' => '1', 'message' => '获取默认收获地址成功', 'data' => $info];
     }
 
     /**
-     * 提交订单
+     * 确认订单 - 提交订单
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
