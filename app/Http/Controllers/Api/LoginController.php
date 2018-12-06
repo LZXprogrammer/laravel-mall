@@ -74,7 +74,7 @@ class LoginController extends Controller
         $ui = $this->userExist($mobile);
         //验证登陆用户是否存在
         if(!empty($ui)) {
-            returnJsonMsg('0', '登陆用户已存在', '');
+            return returnJsonMsg('0', '登陆用户已存在', '');
         }
         //判断用户短信
         $sms = Message::where(['mobile' => $mobile, 'code' => $code, 'is_use' => '0'])->first();
