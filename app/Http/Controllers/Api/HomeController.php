@@ -37,7 +37,7 @@ class HomeController extends Controller
         if($ad_code){
             $area = Area::where('ad_code', $ad_code)->first();
         }else{
-            return ['code' => 0, 'msg' => 'ad_code 参数必传'];
+            return ['code' => 0, 'message' => 'ad_code 参数必传', 'data' => ''];
         }
 
         // 1：企业  2：个人
@@ -82,6 +82,6 @@ class HomeController extends Controller
                 break;
         }
 
-        return $data_lists;
+        return ['code' => 1, 'message' => '请求首页商品列表成功', 'data' => $data_lists];
     }
 }

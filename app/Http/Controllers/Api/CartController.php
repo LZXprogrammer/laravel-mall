@@ -40,7 +40,7 @@ class CartController extends Controller
             $data = Cart::create($cart);
 
             if($data){
-                return returnJsonMsg(1, '添加成功', '');
+                return ['code' => 1, 'message' => '添加购物车成功', 'data' => ''];
             }
         }
     }
@@ -57,6 +57,6 @@ class CartController extends Controller
 
         $cart_lists = Cart::where('c_id', $uid)->get();
 
-        return $cart_lists;
+        return ['code' => 1, 'message' => '请求购物车列表成功', 'data' => $cart_lists];
     }
 }
