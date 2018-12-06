@@ -11,4 +11,6 @@ return [
         'host' => 'http://aliyunverifyidcard.haoservice.com',
         'path' => '/idcard/VerifyIdcardv2',
     ],
+
+    'defaultPage' => '10',
 ];

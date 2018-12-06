@@ -130,9 +130,9 @@ class GoodsController extends Controller
             //添加商品通道
             $form->hasMany('sku', '交易通道', function (Form\NestedForm $form) {
                 $form->text('trad_channel', '交易通道')->rules('required');
-                $form->currency('market_a', '一级分销金额')->symbol('￥')->rules('required');
-                $form->currency('market_b', '二级分销金额')->symbol('￥')->rules('required');
-                $form->currency('market_c', '三级分销金额')->symbol('￥')->rules('required');
+                $form->currency('market_a', '一级分销代理人金额')->symbol('￥')->rules('required');
+                $form->currency('market_b', '二级分销代理人金额')->symbol('￥')->rules('required');
+                $form->currency('market_c', '三级分销代理人金额')->symbol('￥')->rules('required');
                 $form->currency('extra', '额外结算金额')->symbol('￥')->rules('required');
                 $form->hidden('create_time')->value(time());
             });
@@ -201,9 +201,9 @@ class GoodsController extends Controller
         $show->sku('商品通道信息', function ($sku) {
             $sku->setResource('/admin/good');
             $sku->trad_channel('交易通道');
-            $sku->market_a('一级分销金额');
-            $sku->market_b('二级分销金额');
-            $sku->market_c('三级分销金额');
+            $sku->market_a('一级分销代理人金额');
+            $sku->market_b('二级分销代理人金额');
+            $sku->market_c('三级分销代理人金额');
             $sku->extra('额外结算金额');
             $sku->disableCreateButton();
             $sku->disableExport();

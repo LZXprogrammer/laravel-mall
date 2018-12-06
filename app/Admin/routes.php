@@ -14,8 +14,9 @@ Route::group([
     //用户路由
     $router->get('consumer', 'ConsumerController@index');
     $router->get('consumer/{id}/edit', 'ConsumerController@edit');
-    $router->get('consumer/{id}', 'ConsumerController@show');
     $router->put('consumer/{id}', 'ConsumerController@update');
+    $router->get('consumer/{id}', 'ConsumerController@show');
+
     //用户银行卡路由
     $router->get('bank', 'BankController@index');
     $router->get('bank/{id}/edit', 'BankController@edit');
