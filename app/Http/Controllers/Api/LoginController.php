@@ -95,9 +95,9 @@ class LoginController extends Controller
         if($promote) {
             $p_user = Consumer::where('promote', $promote)->first();
             if($p_user) {
-                $level_c = $p_user->id;
-                $level_b = $p_user->level_c;
-                $level_a = $p_user->level_b;
+                $level_c = $p_user->level_b;
+                $level_b = $p_user->level_a;
+                $level_a = $p_user->id;
             }
         }
 
