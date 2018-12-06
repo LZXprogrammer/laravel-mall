@@ -25,8 +25,8 @@ class SmsController extends Controller
      */
     public function index(Request $request)
     {
-        $mobile = $request->post('mobile');
-        $type = $request->post('type');
+        $mobile = $request->get('mobile');
+        $type = $request->get('type');
 
         $send = Message::where('mobile' , $mobile)->where('message_template_id', $type)->where('is_use', '0')
                        ->where('overdue_time', '>=', time())->first();

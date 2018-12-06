@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 //登陆注册模块路由
 Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
     Route::post('/doLogin', 'LoginController@index')->middleware(['mobile', 'password']);
-    Route::get('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
+    Route::post('/doRegister', 'LoginController@register')->middleware(['mobile', 'password', 'code']);
     Route::post('/upPassWord', 'LoginController@updatePassword')->middleware(['mobile', 'upPwd', 'code']);
     Route::post('/fgPassWord', 'LoginController@forgotPassword')->middleware(['mobile', 'fgPwd', 'code']);
 });
@@ -38,7 +38,7 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
 });
 
 //发送短信路由
-Route::post('/sendSms', 'Api\SmsController@index');
+Route::get('/sendSms', 'Api\SmsController@index');
 
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
     Route::get('/detail/{id}', 'GoodsDetailController@goodsDetail');

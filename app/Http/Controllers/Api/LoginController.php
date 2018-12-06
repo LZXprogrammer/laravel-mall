@@ -65,10 +65,10 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         //获取参数
-        $mobile = $request->get('mobile');
-        $password = $request->get('password');
-        $code = $request->get('code');
-        $promote = $request->get('promote');
+        $mobile = $request->post('mobile');
+        $password = $request->post('password');
+        $code = $request->post('code');
+        $promote = $request->post('promote');
 
         //进行逻辑判断
         $ui = $this->userExist($mobile);
