@@ -20,7 +20,7 @@ class UserController extends Controller
     /**
      * 个人中心主页
      *
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function index()
     {
@@ -38,7 +38,8 @@ class UserController extends Controller
         $info['real_times'] = $user->real_time;
         $info['active_times'] = $user->active_time;
         $info['promotes'] = $user->promote;
-        return returnJsonMsg('1', '请求成功', $info);
+
+        return ['code' => '1', 'message' => '请求成功', 'data' => $info];
     }
 
     /**
@@ -66,7 +67,7 @@ class UserController extends Controller
             }
         }
 
-        return returnJsonMsg('1', '请求成功', $list);
+        return ['code' => '1', 'message' => '请求成功', 'data' => $list];
     }
 
     /**
@@ -92,9 +93,9 @@ class UserController extends Controller
         }
         //判断是否成功
         if(!$res) {
-            return returnJsonMsg('0', '请求失败', '');
+            return ['code' => '0', 'message' => '请求失败', 'data' => ''];
         }
-        return returnJsonMsg('1', '请求成功', '');
+        return ['code' => '1', 'message' => '请求成功', 'data' => ''];
     }
 
     /**
@@ -111,9 +112,9 @@ class UserController extends Controller
 
         //判断是否成功
         if(!$res) {
-            return returnJsonMsg('0', '请求失败', '');
+            return ['code' => '0', 'message' => '请求失败', 'data' => ''];
         }
-        return returnJsonMsg('1', '请求成功', '');
+        return ['code' => '1', 'message' => '请求成功', 'data' => ''];
     }
 
     /**
@@ -132,7 +133,7 @@ class UserController extends Controller
 
         $user = Consumer::where('id', session('uid'))->first();
         if(!empty($user['real_name']) && !empty($user['id_number']) && !empty($user['real_time'])) {
-            return returnJsonMsg('0', '用户已实名', '');
+            return ['code' => '0', 'message' => '用户已实名', 'data' => ''];
         }
 
         $update = [
@@ -144,18 +145,18 @@ class UserController extends Controller
 
         if(!$res) {
             DB::rollBack();
-            return returnJsonMsg('0', '实名失败', '');
+            return ['code' => '0', 'message' => '实名失败', 'data' => ''];
         }
 
         if(Config::get('systems.environment') == 'production') {
             $res = $this->_realNameAuth->idCard($real_name, $id_card);
             if ($res != '1') {
                 DB::rollBack();
-                return returnJsonMsg('0', $res, '');
+                return ['code' => '0', 'message' => $res, 'data' => ''];
             }
         }
         //提交数据
         DB::commit();
-        return returnJsonMsg('1', '实名成功', '');
+        return ['code' => '1', 'message' => '实名成功', 'data' => ''];
     }
 }

@@ -10,7 +10,7 @@ class UsersListController extends Controller
     /**
      * 会员列表
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function index(Request $request)
     {
