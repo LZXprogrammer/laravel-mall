@@ -9,6 +9,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\HarvestAddress;
 
 class LoginController extends Controller
 {
@@ -52,6 +53,33 @@ class LoginController extends Controller
         }
 
         $info['uid'] = $ui->id;
+
+        // 用户默认收货地址,若是新用户,默认地址为空
+        $address = HarvestAddress::where('c_id', $ui->id)->where('is_default', 1)->first();
+        if(!$address){
+
+            $info['default_address'] = [];
+        }else{
+
+            $province = $address->province()->first();
+            $city = $address->city()->first();
+            $area = $address->area()->first();
+
+            $address->province = $province->toArray()['name'];
+            $address->city = $city->toArray()['name'];
+            $address->area = $area->toArray()['name'];
+
+            $info['address_id'] = $address->id;
+            $info['address_name'] = $address->name;
+            $info['address_phone'] = $address->phone;
+            $info['address'] = $address->address;
+            $info['province_code'] = $address->province_id;
+            $info['city_code'] = $address->city_id;
+            $info['area_code'] = $address->area_id;
+            $info['province'] = $address->province;
+            $info['city'] = $address->city;
+            $info['area'] = $address->area;
+        }
 
         return ['code' => 1, 'message' => '登陆成功', 'data' => $info];
     }

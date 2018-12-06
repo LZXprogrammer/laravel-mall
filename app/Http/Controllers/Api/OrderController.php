@@ -11,6 +11,8 @@ use App\Models\GoodSku;
 use App\Models\Order;
 use App\Models\OrderItem;
 
+use App\Http\Requests\OrderRequest;
+
 class OrderController extends Controller
 {
     /**
@@ -24,15 +26,21 @@ class OrderController extends Controller
         $uid = $request->session()->get('uid');
 
         $address = HarvestAddress::where('c_id', $uid)->where('is_default', 1)->first();
-        $province = $address->province()->first();
-        $city = $address->city()->first();
-        $area = $address->area()->first();
+        if(!$address){
 
-        $address->province = $province->toArray()['name'];
-        $address->city = $city->toArray()['name'];
-        $address->area = $area->toArray()['name'];
+            return ['code' => 0, 'message' => '当前用户没有收货地址', 'data' => ''];
+        }else{
 
-        return ['code' => '1', 'message' => '获取默认收获地址成功', 'data' => $address];
+            $province = $address->province()->first();
+            $city = $address->city()->first();
+            $area = $address->area()->first();
+
+            $address->province = $province->toArray()['name'];
+            $address->city = $city->toArray()['name'];
+            $address->area = $area->toArray()['name'];
+        }      
+
+        return ['code' => 1, 'message' => '获取默认收获地址成功', 'data' => $address];
     }
 
     /**
@@ -50,7 +58,7 @@ class OrderController extends Controller
 
         $info = array_merge($goods_sku->toArray(), $goods->toArray());
 
-        return ['code' => '1', 'message' => '获取默认收获地址成功', 'data' => $info];
+        return ['code' => 1, 'message' => '获取默认收获地址成功', 'data' => $info];
     }
 
     /**
@@ -59,9 +67,9 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function submitOrder(Request $request)
+    public function submitOrder(OrderRequest $request)
     {
-        //
+        
     }
 
     /**
