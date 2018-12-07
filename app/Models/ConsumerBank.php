@@ -13,11 +13,11 @@ class ConsumerBank extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'c_id', 'bank_name', 'bank_card', 'create_time', 'is_del', 'is_default'
+        'id', 'c_id', 'bank_name', 'bank_card', 'create_time', 'is_del', 'is_default', 'reserved_mobile'
     ];
 
     // 表示 create_time 是一个日期字段
-    protected $dates = ['create_time'];
+    protected $dates = [];
 
     /**
      * 隐藏字段

@@ -13,4 +13,6 @@ return [
     ],
 
     'defaultPage' => '10',
+
+    'checkBank' => 'https://ccdcapi.alipay.com/validateAndCacheCardInfo.json',
 ];

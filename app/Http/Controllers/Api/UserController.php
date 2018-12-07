@@ -7,16 +7,19 @@ use App\Models\HarvestAddress;
 use App\Models\ConsumerBank;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Notifications\realNameAuthNotification;
+use App\Notifications\realNameAuthNotification AS realNameAuth;
+use App\Notifications\BankVerificationNotification AS bankAuth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     protected $_realNameAuth;
+    protected $_bankAuth;
 
-    public function __construct(realNameAuthNotification $realNameAuthNotification){
-        $this->_realNameAuth = $realNameAuthNotification;
+    public function __construct(realNameAuth $realNameAuth, bankAuth $bankAuth){
+        $this->_realNameAuth = $realNameAuth;
+        $this->_bankAuth = $bankAuth;
     }
     /**
      * 个人中心主页
@@ -209,16 +212,17 @@ class UserController extends Controller
 
         //若设置默认，则取消以前的默认
         if($is_default == '1') {
-            $update = ConsumerBank::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
-            if(!$update) {
-                return ['code' => 0, 'message' => '请求失败', 'data' => ''];
-            }
+            ConsumerBank::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
         }
 
+        $bankInfo =  $this->_bankAuth->CheckBank($bank_card);
+        if($bankInfo['code'] != '1') {
+            return ['code' => 0, 'message' => $bankInfo['msg'], 'data' => ''];
+        }
         if(empty($id)) {
             $bank = [
                 'c_id'=>session('uid'),
-                'bank_name'=>'',
+                'bank_name'=>$bankInfo['msg'],
                 'bank_card'=>$bank_card,
                 'reserved_mobile'=>$reserved_mobile,
                 'create_time'=>time(),
@@ -235,7 +239,12 @@ class UserController extends Controller
                 'is_del'=>'1',
                 'is_default'=>$is_default
             ];
-            ConsumerBank::where('id', $id)->update($bank);
+            $res = ConsumerBank::where('id', $id)->update($bank);
         }
+        //判断是否成功
+        if(!$res) {
+            return ['code' => 0, 'message' => '请求失败', 'data' => ''];
+        }
+        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
     }
 }
