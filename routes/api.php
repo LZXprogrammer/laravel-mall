@@ -54,7 +54,8 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/addressDel', 'UserController@delAddress')->middleware(['address']);
         Route::post('/realName', 'UserController@realNameAuth')->middleware(['realNameAuth']);
         Route::post('/bankList', 'UserController@bankList');
-        Route::post('/bankEdit', 'UserController@editBank');
+        Route::post('/bankEdit', 'UserController@editBank')->middleware('mobile');
+        Route::post('/bankDel', 'UserController@delBank')->middleware('id');
         Route::get('/listsUser', 'UsersListController@index')->middleware('level');
     });
     

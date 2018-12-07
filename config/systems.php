@@ -11,8 +11,8 @@ return [
         'host' => 'http://aliyunverifyidcard.haoservice.com',
         'path' => '/idcard/VerifyIdcardv2',
     ],
-
+    //默认每页数据数量
     'defaultPage' => '10',
-
+    //查询用户银行卡校验
     'checkBank' => 'https://ccdcapi.alipay.com/validateAndCacheCardInfo.json',
 ];

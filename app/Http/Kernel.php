@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\CheckUser::class,
         'orderSubmit' => \App\Http\Middleware\CheckOrderSubmit::class,
         'level' => \App\Http\Middleware\CheckLevel::class,
+        'id' => \App\Http\Middleware\CheckId::class,
     ];
 
     /**

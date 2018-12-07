@@ -120,18 +120,21 @@ class UserController extends Controller
 
         //修改数据状态
         $address = ['is_del' => '0'];
-        $res = HarvestAddress::where('id', $id)->update($address);
+        $res = HarvestAddress::where('id', $id)->where('c_id', session('uid'))->update($address);
 
         //判断是否成功
         if(!$res) {
-            return ['code' => 0, 'message' => '请求失败', 'data' => ''];
+            return ['code' => 0, 'message' => '删除失败', 'data' => ''];
         }
-        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
+        return ['code' => 1, 'message' => '删除成功', 'data' => ''];
     }
 
     /**
      * 实名认证
      *
+     * @param   uid     string        用户ID
+     * @param   real_name     string        真实姓名
+     * @param   idCard     string        身份证号
      * @return array()
      */
     public function realNameAuth(Request $request)
@@ -175,6 +178,7 @@ class UserController extends Controller
     /**
      * 银行卡列表
      *
+     * @param   uid     string      用户
      * @return array()
      */
     public function bankList()
@@ -200,6 +204,11 @@ class UserController extends Controller
     /**
      * 编辑银行卡
      *
+     * @param   id      string      银行卡ID
+     * @param   bank_card      string      银行卡号
+     * @param   mobile      string      电话号
+     * @param   is_default      string      是否默认
+     * @param   uid      string      用户ID
      * @return array()
      */
     public function editBank(Request $request)
@@ -231,6 +240,10 @@ class UserController extends Controller
             ];
             $res = ConsumerBank::create($bank);
         }else{
+            $info = ConsumerBank::where('id', $id)->where('is_del', '1')->first();
+            if(empty($info)) {
+                return ['code' => 0, 'message' => '用户所修改银行卡不存在', 'data' => ''];
+            }
             $bank = [
                 'bank_name'=>'',
                 'bank_card'=>$bank_card,
@@ -246,5 +259,28 @@ class UserController extends Controller
             return ['code' => 0, 'message' => '请求失败', 'data' => ''];
         }
         return ['code' => 1, 'message' => '请求成功', 'data' => ''];
+    }
+
+    /**
+     * 删除银行卡
+     *
+     * @param    id      string      银行卡ID
+     * @param    uid     string      用户ID
+     * @return array()
+     */
+    public function delBank(Request $request)
+    {
+        //获取参数
+        $id = $request->post('id');
+
+        //修改数据状态
+        $address = ['is_del' => '0'];
+        $res = ConsumerBank::where('id', $id)->where('c_id', session('uid'))->update($address);
+
+        //判断是否成功
+        if(!$res) {
+            return ['code' => 0, 'message' => '删除失败', 'data' => ''];
+        }
+        return ['code' => 1, 'message' => '删除成功', 'data' => ''];
     }
 }
