@@ -64,7 +64,8 @@ Route::group(['middleware' => 'user'], function () {
     Route::group(['prefix' => 'order', 'namespace' => 'Api'], function () {
 
         Route::post('/address', 'OrderController@orderAddress');
-        Route::post('/goods', 'OrderController@orderGoods');
+        Route::post('/goods/buynow', 'OrderController@orderGoodsBuyNow');
+        Route::post('/goods/buycart', 'OrderController@orderGoodsBuyCart')->middleware('orderGoods');
         Route::post('/submit', 'OrderController@orderSubmit')->middleware('orderSubmit');
 
     });

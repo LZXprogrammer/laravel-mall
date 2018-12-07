@@ -14,7 +14,7 @@ class Cart extends Model
      */
     protected $fillable = [
         'id', 'c_id', 'g_sku_id', 'g_id', 'amount', 'name', 'create_time', 
-        'show_pic', 'category', 'price', 'trad_channel'
+        'show_pic', 'category', 'price', 'trad_channel', 'extra'
     ];
 
     // 表示 create_time 是一个日期字段

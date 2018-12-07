@@ -30,6 +30,7 @@ class CartController extends Controller
             $cart['g_sku_id']     = $goods_sku->id;
             $cart['g_id']         = $goods_sku->g_id;
             $cart['trad_channel'] = $goods_sku->trad_channel;
+            $cart['extra']        = $goods_sku->extra;
             $cart['name']         = $goods->name;
             $cart['price']        = $goods->price;
             $cart['category']     = $goods->category;
@@ -56,6 +57,12 @@ class CartController extends Controller
         $uid = $request->session()->get('uid');
 
         $cart_lists = Cart::where('c_id', $uid)->get();
+
+        // get方法返回的是一个集合,用empty判断其值是不为空的,所以要先转成数组
+        if(empty($cart_lists->toArray())){
+            
+            return ['code' => 1, 'message' => '购物车空空如也,当前用户要么正在吃土,要么就是穷逼', 'data' => ''];
+        }
 
         return ['code' => 1, 'message' => '请求购物车列表成功', 'data' => $cart_lists];
     }
