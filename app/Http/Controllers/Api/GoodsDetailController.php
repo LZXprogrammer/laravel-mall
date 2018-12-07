@@ -15,16 +15,17 @@ class GoodsDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function goodsDetail(Request $request, $id)
+    public function goodsDetail(Request $request)
     {
-        $goods = Good::find($id)->first();
+        $goods = Good::where('id', $request->id)->first();
 
         if(!$goods){
             return ['code' => 0, 'message' => '请求商品不存在', 'data' => ''];
         }
 
         // 获取商品 sku
-        $goods_sku = $goods->sku->first();
+        $goods_sku = $goods->sku()->select(['id', 'trad_channel', 'extra'])->get();
+        $goods->sku = $goods_sku;
 
         return ['code' => 1, 'message' => '请求商品详情成功', 'data' => $goods];
     }
