@@ -71,6 +71,10 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/submit', 'OrderController@orderSubmit')->middleware('orderSubmit');
 
     });
+
+    Route::group(['prefix' => 'orders', 'namespace' => 'Api'], function () {
+        Route::post('/index', 'UserOrderController@index');
+    });
 });
 
 
