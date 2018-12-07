@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Consumer;
 use App\Models\HarvestAddress;
+use App\Models\ConsumerBank;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\realNameAuthNotification;
@@ -158,5 +159,40 @@ class UserController extends Controller
         //提交数据
         DB::commit();
         return ['code' => 1, 'message' => '实名成功', 'data' => ''];
+    }
+
+    /**
+     * 银行卡列表
+     *
+     * @return array()
+     */
+    public function bankList()
+    {
+        $info = ConsumerBank::where('c_id', session('uid'))->with('bank')->where('is_del', '1')->get();
+        $list = array();
+        //拼装参数
+        if(!empty($info)) {
+            foreach ($info as $k => $v) {
+                $res['id'] = $v['id'];
+                $res['abbreviation'] = $v['bank']['abbreviation'];
+                $res['bank_name'] = $v['bank']['name'];
+                $res['bank_logo'] = $v['bank']['logo'];
+                $res['bank_card'] = $v['bank_card'];
+                $res['is_default'] = $v['is_default'];
+                $list[] = $res;
+            }
+        }
+
+        return ['code' => 1, 'message' => '请求成功', 'data' => $list];
+    }
+
+    /**
+     * 编辑银行卡
+     *
+     * @return array()
+     */
+    public function editBank(Request $request)
+    {
+        $bank_name = $request->post('bank_name');
     }
 }

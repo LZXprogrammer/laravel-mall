@@ -25,4 +25,8 @@ class ConsumerBank extends Model
      * @var array
      */
     protected $hidden = [];
+
+    public function bank() {
+        return $this->belongsTo(Bank::class, 'bank_name', 'abbreviation');
+    }
 }
