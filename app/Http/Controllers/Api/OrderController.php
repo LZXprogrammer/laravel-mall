@@ -11,8 +11,6 @@ use App\Models\GoodSku;
 use App\Models\Order;
 use App\Models\OrderItem;
 
-use App\Http\Requests\OrderRequest;
-
 class OrderController extends Controller
 {
     /**
@@ -67,9 +65,14 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function submitOrder(OrderRequest $request)
+    public function orderSubmit(Request $request)
     {
-        
+        // return 11;
+        $address_id = $request->has('address_id') ?  $request->post('address_id') : 0;
+        $g_sku_id   = $request->has('g_sku_id') ?  $request->post('g_sku_id') : 0;
+        $g_sku_id   = $request->has('g_sku_id') ?  $request->post('g_sku_id') : 0;
+        $g_sku_id   = $request->has('g_sku_id') ?  $request->post('g_sku_id') : 0;
+
     }
 
     /**

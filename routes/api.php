@@ -41,7 +41,7 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
 Route::post('/sendSms', 'Api\SmsController@index');
 
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
-    Route::get('/detail/{id}', 'GoodsDetailController@goodsDetail');
+    Route::get('/detail', 'GoodsDetailController@goodsDetail');
     Route::get('/comment/{id}', 'GoodsDetailController@goodsComment');
 });
 
@@ -66,6 +66,7 @@ Route::group(['middleware' => 'user'], function () {
 
         Route::post('/address', 'OrderController@orderAddress');
         Route::post('/goods', 'OrderController@orderGoods');
+        Route::post('/submit', 'OrderController@orderSubmit')->middleware('orderSubmit');
 
     });
 });
