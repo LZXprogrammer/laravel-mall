@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Consumer;
+use App\Models\Order;
 use App\Models\Message;
 use App\Models\HarvestAddress;
 use App\Models\ConsumerBank;
@@ -43,6 +44,13 @@ class UserController extends Controller
         $info['real_times'] = $user->real_time;
         $info['active_times'] = $user->active_time;
         $info['promotes'] = $user->promote;
+        $info['obligation'] = Order::where('c_id', session('uid'))->where('pay_status', '0')->count();
+        $info['accountPaid'] = Order::where('c_id', session('uid'))->where('pay_status', '1')->count();
+        $info['waitReceive'] = Order::where('c_id', session('uid'))->where('pay_status', '2')->count();
+        $info['toEvaluate'] = Order::where('c_id', session('uid'))->where('pay_status', '3')->count();
+        $info['refunded'] = Order::where('c_id', session('uid'))->where('pay_status', '5')->count();
+
+
 
         return ['code' => 1, 'message' => '请求成功', 'data' => $info];
     }
