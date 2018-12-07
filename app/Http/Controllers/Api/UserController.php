@@ -84,12 +84,20 @@ class UserController extends Controller
         $address = $request->post('address');
         $name = $request->post('name');
         $phone = $request->post('phone');
+        $is_default = $request->post('is_default');
+
+        if($is_default == '1') {
+            $update = HarvestAddress::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
+            if(!$update) {
+                return ['code' => 0, 'message' => '请求失败', 'data' => ''];
+            }
+        }
         //判断是创建还是修改
         if(empty($id)) {
-            $address = ['c_id'=>session('uid'),'province_id'=>$province_id,'city_id'=>$city_id,'area_id'=>$area_id,'address'=>$address,'name'=>$name,'phone'=>$phone];
+            $address = ['c_id'=>session('uid'),'province_id'=>$province_id,'city_id'=>$city_id,'area_id'=>$area_id,'address'=>$address,'name'=>$name,'phone'=>$phone,'is_default'=>$is_default];
             $res = HarvestAddress::create($address);
         }else{
-            $address = ['province_id'=>$province_id,'city_id'=>$city_id,'area_id'=>$area_id,'address'=>$address,'name'=>$name,'phone'=>$phone];
+            $address = ['province_id'=>$province_id,'city_id'=>$city_id,'area_id'=>$area_id,'address'=>$address,'name'=>$name,'phone'=>$phone,'is_default'=>$is_default];
             $res = HarvestAddress::where('id', $id)->update($address);
         }
         //判断是否成功
@@ -193,6 +201,41 @@ class UserController extends Controller
      */
     public function editBank(Request $request)
     {
-        $bank_name = $request->post('bank_name');
+        //获取参数
+        $id = $request->post('id');
+        $bank_card = $request->post('bank_card');
+        $reserved_mobile = $request->post('mobile');
+        $is_default = $request->post('is_default');
+
+        //若设置默认，则取消以前的默认
+        if($is_default == '1') {
+            $update = ConsumerBank::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
+            if(!$update) {
+                return ['code' => 0, 'message' => '请求失败', 'data' => ''];
+            }
+        }
+
+        if(empty($id)) {
+            $bank = [
+                'c_id'=>session('uid'),
+                'bank_name'=>'',
+                'bank_card'=>$bank_card,
+                'reserved_mobile'=>$reserved_mobile,
+                'create_time'=>time(),
+                'is_del'=>'1',
+                'is_default'=>$is_default
+            ];
+            $res = ConsumerBank::create($bank);
+        }else{
+            $bank = [
+                'bank_name'=>'',
+                'bank_card'=>$bank_card,
+                'reserved_mobile'=>$reserved_mobile,
+                'create_time'=>time(),
+                'is_del'=>'1',
+                'is_default'=>$is_default
+            ];
+            ConsumerBank::where('id', $id)->update($bank);
+        }
     }
 }
