@@ -218,7 +218,7 @@ class LoginController extends Controller
         if(!$user || !$u_sms) {
             //回滚数据
             DB::rollBack();
-            return ['code' => 0, 'message' => '用户修改密码失败', 'data' => ''];
+            return ['code' => 0, 'message' => '用户修改密码跟原密码一样', 'data' => ''];
         }
         //提交数据
         DB::commit();
@@ -273,7 +273,7 @@ class LoginController extends Controller
         if(!$user) {
             //回滚数据
             DB::rollBack();
-            return ['code' => 0, 'message' => '用户修改密码失败', 'data' => ''];
+            return ['code' => 0, 'message' => '用户修改密码跟原密码一样', 'data' => ''];
         }
         //提交数据
         DB::commit();
