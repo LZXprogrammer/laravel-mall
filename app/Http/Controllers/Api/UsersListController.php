@@ -21,20 +21,21 @@ class UsersListController extends Controller
 
         $page = Config::get('systems.defaultPage');
         $select = ['mobile', 'avatar', 'nick_name', 'create_time', 'is_active', 'active_time', 'promote'];
-        $info = array();
+        $user = array();
         //进行判断是几级分销代理
         switch ($level) {
             case '1':
-                $info = Consumer::where('level_a', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_a', session('uid'))->select($select)->simplePaginate($page);
                 break;
             case '2':
-                $info = Consumer::where('level_b', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_b', session('uid'))->select($select)->simplePaginate($page);
                 break;
             case '3':
-                $info = Consumer::where('level_c', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_c', session('uid'))->select($select)->simplePaginate($page);
                 break;
         }
-        return ['code' => '1', 'message' => '请求成功', 'data' => $info];
+
+        return ['code' => '1', 'message' => '请求成功', 'data' => $user];
     }
 
 
