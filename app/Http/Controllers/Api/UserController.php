@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Consumer;
+use App\Models\Message;
 use App\Models\HarvestAddress;
 use App\Models\ConsumerBank;
 use Illuminate\Http\Request;
@@ -218,6 +219,16 @@ class UserController extends Controller
         $bank_card = $request->post('bank_card');
         $reserved_mobile = $request->post('mobile');
         $is_default = $request->post('is_default');
+        $code = $request->post('code');
+
+        //判断用户短信
+        $sms = Message::where(['mobile' => $reserved_mobile, 'code' => $code, 'is_use' => '0'])->first();
+        if(empty($sms)) {
+            return ['code' => 0, 'message' => '用户输入短信验证码不存在或不正确', 'data' => ''];
+        }
+        if($sms->overdue_time < time()) {
+            return ['code' => 0, 'message' => '用户短信验证码已过期', 'data' => ''];
+        }
 
         //若设置默认，则取消以前的默认
         if($is_default == '1') {
