@@ -139,9 +139,9 @@ class UserOrderController extends Controller
 
         $res = Order::where('id', $id)->where('c_id', session('uid'))->update(['is_del'=>'0']);
         if(!$res) {
-            return ['code'=>'0', 'message'=>'取消订单失败', 'data'=>''];
+            return ['code'=>'0', 'message'=>'删除订单失败', 'data'=>''];
         }
-        return ['code'=>'1', 'message'=>'取消订单成功', 'data'=>''];
+        return ['code'=>'1', 'message'=>'删除订单成功', 'data'=>''];
     }
 
     /**
@@ -156,7 +156,7 @@ class UserOrderController extends Controller
         //获取参数
         $id = $request->get('id');
 
-        $order = Order::where('id', $id)->where('c_id', session('uid'))->first();
+        $order = Order::where('id', $id)->where('c_id', session('uid'))->where('is_del', '1')->first();
         if(empty($order)) {
             return ['code'=>'0', 'message'=>'订单不存在', 'data'=>''];
         }
@@ -200,7 +200,7 @@ class UserOrderController extends Controller
         //获取参数
         $id = $request->get('id');
 
-        $order = Order::where('id', $id)->where('c_id', session('uid'))->first();
+        $order = Order::where('id', $id)->where('c_id', session('uid'))->where('is_del', '1')->where('closed', '0')->first();
         if(empty($order)) {
             return ['code'=>'0', 'message'=>'订单不存在', 'data'=>''];
         }
@@ -213,8 +213,8 @@ class UserOrderController extends Controller
 
         $res = Order::where('id', $id)->where('c_id', session('uid'))->update(['pay_status'=>'3']);
         if(!$res) {
-            return ['code'=>'0', 'message'=>'取消订单失败', 'data'=>''];
+            return ['code'=>'0', 'message'=>'确认收货失败', 'data'=>''];
         }
-        return ['code'=>'1', 'message'=>'取消订单成功', 'data'=>''];
+        return ['code'=>'1', 'message'=>'确认收货成功', 'data'=>''];
     }
 }
