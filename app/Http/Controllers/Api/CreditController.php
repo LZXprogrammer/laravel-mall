@@ -35,10 +35,14 @@ class CreditController extends Controller
 
         switch ($type) {
             case 'hot':
-                $data_lists = CreditCard::where('is_hot', 1)->with('credit_type')->get();
+                $data_lists = CreditCard::where('is_hot', 1)
+                                        ->select(['id', 'bank_name', 'name', 'picture', 'apply_num', 'blurb'])
+                                        ->get();
                 break;
             case 'new':
-                $data_lists = CreditCard::where('is_new', 1)->with('credit_type')->get();
+                $data_lists = CreditCard::where('is_new', 1)
+                                        ->select(['id', 'bank_name', 'name', 'picture', 'apply_num', 'blurb'])
+                                        ->get();
                 break;
 
             default:
@@ -54,9 +58,17 @@ class CreditController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function creditDetail($id)
+    public function creditDetail(Request $request)
     {
-        $credir_detail = CreditCard::whereId($id)->first();
+        $card_id = $request->has('id') ? $request->id : 0;
+
+        $credir_detail = CreditCard::where('id', $card_id)
+                                    ->select(['id', 'bank_name', 'type', 'name', 'picture', 'apply_num', 'blurb', 'content', 
+                                            'sort', 'is_hot', 'is_new'])->first();
+        $credit_type = $credir_detail->credit_type()->select(['id', 'name'])->first();
+
+        $credir_detail->type_id = $credit_type->id;
+        $credir_detail->type = $credit_type->name;
 
         if(!$credir_detail){
             return ['code' => 0, 'message' => '请求信用卡不存在', 'data' => ''];

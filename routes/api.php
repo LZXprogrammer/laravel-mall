@@ -28,7 +28,7 @@ Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
 Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'CreditController@creditBanner');
     Route::get('/list', 'CreditController@creditList');
-    Route::get('/detail/{id}', 'CreditController@creditDetail');
+    Route::get('/detail', 'CreditController@creditDetail');
     Route::get('/comment/{id}', 'CreditController@creditComment');
 });
 

@@ -59,7 +59,7 @@ class OrderController extends Controller
             return ['code' => 0, 'message' => '没有该商品', 'data' => $g_sku_id];
         }
 
-        $goods = $goods_sku->good()->select(['name', 'category', 'courier_fees', 'show_pic'])->first();
+        $goods = $goods_sku->good()->select(['name', 'category', 'courier_fees', 'show_pic', 'price'])->first();
         $goods_sku->g_sku_id = $g_sku_id;
         $info = array_merge($goods_sku->toArray(), $goods->toArray());
 
