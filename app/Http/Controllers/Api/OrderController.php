@@ -91,8 +91,11 @@ class OrderController extends Controller
             $infos[$cart->g_id]['show_pic'] = $cart->show_pic;
             $infos[$cart->g_id]['category'] = $cart->category;
             $infos[$cart->g_id]['price'] = $cart->price;
-            $infos[$cart->g_id]['courier_fees'] = $cart->courier_fees;
-
+            // $infos[$cart->g_id]['courier_fees'] = $cart->courier_fees;
+            
+            // 运费 = 当前这笔订单中,多个商品的运费取最大值
+            $courier_fees[] = $cart->courier_fees;
+            
             $g_sku['g_sku_id'] = $cart->g_sku_id;
             $g_sku['trad_channel'] = $cart->trad_channel;
             $g_sku['amount'] = $value['amount'];
@@ -101,7 +104,7 @@ class OrderController extends Controller
             $infos[$cart->g_id]['g_sku'][] = $g_sku;
         }
 
-        return ['code' => 1, 'message' => '获取商品信息成功', 'data' => array_merge($infos)];
+        return ['code' => 1, 'message' => '获取商品信息成功', 'courier_fees' => max($courier_fees), 'data' => array_merge($infos)];
     }
 
     /**
