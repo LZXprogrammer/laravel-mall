@@ -91,11 +91,11 @@ class OrderController extends Controller
             $infos[$cart->g_id]['show_pic'] = $cart->show_pic;
             $infos[$cart->g_id]['category'] = $cart->category;
             $infos[$cart->g_id]['price'] = $cart->price;
-            $infos[$cart->g_id]['amount'] = $value['amount'];
             $infos[$cart->g_id]['courier_fees'] = $cart->courier_fees;
 
             $g_sku['g_sku_id'] = $cart->g_sku_id;
             $g_sku['trad_channel'] = $cart->trad_channel;
+            $g_sku['amount'] = $value['amount'];
             $g_sku['extra'] = $cart->extra;
 
             $infos[$cart->g_id]['g_sku'][] = $g_sku;
