@@ -78,6 +78,7 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/ordersCancel', 'UserOrderController@cancelOrder')->middleware('id');
         Route::post('/ordersDel', 'UserOrderController@delOrder')->middleware('id');
         Route::post('/ordersDetail', 'UserOrderController@detailOrder')->middleware('id');
+        Route::post('/orderConfirm', 'UserOrderController@confirmOrder')->middleware('id');
     });
 });
 
