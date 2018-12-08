@@ -21,28 +21,30 @@ class CartController extends Controller
 
         $g_sku_id  = $request->has('g_sku_id') ? $request->input('g_sku_id') : 0;
 
-        if($g_sku_id){
+        $goods_sku = GoodSku::where('id', $g_sku_id)->select(['id', 'g_id', 'trad_channel', 'extra'])->first();
 
-            $goods_sku = GoodSku::where('id', $g_sku_id)->select(['id', 'g_id', 'trad_channel'])->first();
-            $goods = $goods_sku->good()->select(['name', 'category', 'price', 'show_pic'])->first();
+        if(!$goods_sku){
+            return ['code' => 0, 'message' => '没有该商品', 'data' => 'g_sku_id: '.$request->input('g_sku_id')];
+        }
 
-            $cart['c_id']         = $uid;
-            $cart['g_sku_id']     = $goods_sku->id;
-            $cart['g_id']         = $goods_sku->g_id;
-            $cart['trad_channel'] = $goods_sku->trad_channel;
-            $cart['extra']        = $goods_sku->extra;
-            $cart['name']         = $goods->name;
-            $cart['price']        = $goods->price;
-            $cart['category']     = $goods->category;
-            $cart['show_pic']     = $goods->show_pic;
-            $cart['amount']       = 1;
-            $cart['create_time']  = time();
+        $goods = $goods_sku->good()->select(['name', 'category', 'price', 'show_pic'])->first();
 
-            $data = Cart::create($cart);
+        $cart['c_id']         = $uid;
+        $cart['g_sku_id']     = $goods_sku->id;
+        $cart['g_id']         = $goods_sku->g_id;
+        $cart['trad_channel'] = $goods_sku->trad_channel;
+        $cart['extra']        = $goods_sku->extra;
+        $cart['name']         = $goods->name;
+        $cart['price']        = $goods->price;
+        $cart['category']     = $goods->category;
+        $cart['show_pic']     = $goods->show_pic;
+        $cart['amount']       = 1;
+        $cart['create_time']  = time();
 
-            if($data){
-                return ['code' => 1, 'message' => '添加购物车成功', 'data' => ''];
-            }
+        $data = Cart::create($cart);
+
+        if($data){
+            return ['code' => 1, 'message' => '添加购物车成功', 'data' => ''];
         }
     }
 
