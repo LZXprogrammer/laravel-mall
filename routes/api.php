@@ -73,7 +73,10 @@ Route::group(['middleware' => 'user'], function () {
     });
 
     Route::group(['prefix' => 'orders', 'namespace' => 'Api'], function () {
-        Route::post('/index', 'UserOrderController@index');
+        Route::get('/index', 'UserOrderController@index');
+        Route::post('/ordersCancel', 'UserOrderController@cancelOrder')->middleware('id');
+        Route::post('/ordersDel', 'UserOrderController@delOrder')->middleware('id');
+        Route::post('/ordersDetail', 'UserOrderController@detailOrder')->middleware('id');
     });
 });
 

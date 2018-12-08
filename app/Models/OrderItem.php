@@ -25,4 +25,22 @@ class OrderItem extends Model
      * @var array
      */
     protected $hidden = [];
+
+    //关联商品
+    public function goods()
+    {
+        return $this->belongsTo(Good::class, 'product_id');
+    }
+
+    //关联商品sku
+    public function goods_sku()
+    {
+        return $this->belongsTo(GoodSku::class, 'product_sku_id');
+    }
+
+    //关联订单主表
+    public function orders()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }
