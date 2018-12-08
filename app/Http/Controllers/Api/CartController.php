@@ -27,13 +27,14 @@ class CartController extends Controller
             return ['code' => 0, 'message' => '没有该商品', 'data' => 'g_sku_id: '.$request->input('g_sku_id')];
         }
 
-        $goods = $goods_sku->good()->select(['name', 'category', 'price', 'show_pic'])->first();
+        $goods = $goods_sku->good()->select(['name', 'category', 'price', 'show_pic', 'courier_fees'])->first();
 
         $cart['c_id']         = $uid;
         $cart['g_sku_id']     = $goods_sku->id;
         $cart['g_id']         = $goods_sku->g_id;
         $cart['trad_channel'] = $goods_sku->trad_channel;
         $cart['extra']        = $goods_sku->extra;
+        $cart['courier_fees'] = $goods->courier_fees;
         $cart['name']         = $goods->name;
         $cart['price']        = $goods->price;
         $cart['category']     = $goods->category;

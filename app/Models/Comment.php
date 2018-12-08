@@ -13,7 +13,7 @@ class Comment extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'c_id', 'g_id', 'content', 'nick_name', 'avatar', 'status', 'reply_num', 'like_num', 'create_time'
+        'id', 'c_id', 'g_id', 'content', 'status', 'reply_num', 'like_num', 'create_time'
     ];
 
     // 表示 create_time 是一个日期字段
@@ -48,5 +48,13 @@ class Comment extends Model
     public function credit()
     {
         return $this->belongsTo(CreditCard::class, 'credit_id');
+    }
+
+    /**
+     * 模型关联 回复评论
+     */
+    public function comment_replies()
+    {
+        return $this->hasMany(CommentReply::class, 'comment_id');
     }
 }

@@ -76,17 +76,32 @@ class OrderController extends Controller
     public function orderGoodsBuyCart(Request $request)
     {   
         $cart_infos = json_decode($request->cart_infos, true);
-
+        $infos = [];
         foreach($cart_infos as $key => $value)
         {
-            $infos[] = Cart::where('id', $value['cart_id'])
-                            ->select(['g_sku_id', 'g_id', 'name', 'trad_channel', 'show_pic', 'category', 'price', 'extra'])
+            $cart = Cart::where('id', $value['cart_id'])
+                            ->select(['g_sku_id', 'g_id', 'name', 'trad_channel', 'show_pic', 'category', 'price', 'extra', 'courier_fees'])
                             ->first();
-            $infos[$key]['amount'] = $value['amount'];
-            $infos[$key]['cart_id'] = $value['cart_id'];
+            if(!$cart){
+                return ['code' => 0, 'message' => '传来的cart_id不存在', 'data' => 'cart_id: '.$value['cart_id']];
+            }
+
+            $infos[$cart->g_id]['g_id'] = $cart->g_id;
+            $infos[$cart->g_id]['name'] = $cart->name;
+            $infos[$cart->g_id]['show_pic'] = $cart->show_pic;
+            $infos[$cart->g_id]['category'] = $cart->category;
+            $infos[$cart->g_id]['price'] = $cart->price;
+            $infos[$cart->g_id]['amount'] = $value['amount'];
+            $infos[$cart->g_id]['courier_fees'] = $cart->courier_fees;
+
+            $g_sku['g_sku_id'] = $cart->g_sku_id;
+            $g_sku['trad_channel'] = $cart->trad_channel;
+            $g_sku['extra'] = $cart->extra;
+
+            $infos[$cart->g_id]['g_sku'][] = $g_sku;
         }
 
-        return ['code' => 1, 'message' => '获取商品信息成功', 'data' => $infos];
+        return ['code' => 1, 'message' => '获取商品信息成功', 'data' => array_merge($infos)];
     }
 
     /**
