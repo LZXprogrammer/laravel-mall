@@ -22,7 +22,12 @@ class HomeController extends Controller
     {
         $credit_banner = Article::select(['picture', 'url'])->whereType(1)->get();
 
-        return $credit_banner;
+        if(!$credit_banner){
+
+            return ['code' => 0, 'message' => '暂无轮播图', 'data' => ''];
+        }
+        
+        return ['code' => 1, 'message' => '请求轮播图成功', 'data' => $credit_banner];
     }
 
     /**

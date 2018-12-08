@@ -45,4 +45,13 @@ class HarvestAddress extends Model
     {
         return $this->belongsTo(Consumer::class, 'c_id');
     }
+
+    public function getFullAddressAttribute()
+    {   
+        $province = $this->province;
+        $city = $this->city;
+        $area = $this->area;
+
+        return "{$province->name}{$city->name}{$area->name}{$this->address}";
+    }
 }

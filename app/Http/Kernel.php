@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'addressEdit' => \App\Http\Middleware\CheckAddressEdit::class,
         'user' => \App\Http\Middleware\CheckUser::class,
         'orderSubmit' => \App\Http\Middleware\CheckOrderSubmit::class,
+        'orderGoods' => \App\Http\Middleware\CheckOrderGoods::class,
         'level' => \App\Http\Middleware\CheckLevel::class,
         'id' => \App\Http\Middleware\CheckId::class,
     ];
