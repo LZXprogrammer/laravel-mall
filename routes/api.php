@@ -29,7 +29,7 @@ Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'CreditController@creditBanner');
     Route::get('/list', 'CreditController@creditList');
     Route::get('/detail', 'CreditController@creditDetail');
-    Route::get('/comment/{id}', 'CreditController@creditComment');
+    Route::get('/comment', 'CreditController@creditComment');
 });
 
 Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
