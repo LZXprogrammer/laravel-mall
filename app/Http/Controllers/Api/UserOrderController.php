@@ -48,7 +48,7 @@ class UserOrderController extends Controller
                 $info = Order::where('c_id', session('uid'))->where('pay_status', '3')->where('is_del', '1')
                     ->select('id')->simplePaginate($pages)->toArray();
                 break;
-            case '5':
+            case '4':
                 $info = Order::where('c_id', session('uid'))->where('pay_status', '5')->where('is_del', '1')
                     ->select('id')->simplePaginate($pages)->toArray();
                 break;
