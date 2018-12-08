@@ -56,22 +56,22 @@ class ConsumerController extends Controller
                 return ($value==1) ? '是' : '否';
             });
             $grid->level_a('一级分销代理人')->display(function ($value) {
-                return ($value == 0) ? '无' : $value;
+                return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
             });
             $grid->level_b('二级分销代理人')->display(function ($value) {
-                return ($value == 0) ? '无' : $value;
+                return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
             });
             $grid->level_c('三级分销代理人')->display(function ($value) {
-                return ($value == 0) ? '无' : $value;
+                return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
             });
             $grid->create_time('注册时间')->display(function ($value) {
-                return date('Y-m-d H:i:s', $value);
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
             });
             $grid->real_time('实名时间')->display(function ($value) {
-                return date('Y-m-d H:i:s', $value);
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
             });
             $grid->active_time('激活时间')->display(function ($value) {
-                return date('Y-m-d H:i:s', $value);
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
             });
 
             $grid->actions(function ($actions) {
@@ -122,7 +122,6 @@ class ConsumerController extends Controller
     {
         $show = new Show(Consumer::findOrFail($id));
 
-        $show->id('ID');
         $show->mobile('用户账号');
         $show->avatar('用户头像')->image();
         $show->nick_name('用户昵称');
@@ -130,17 +129,23 @@ class ConsumerController extends Controller
         $show->id_number('身份证号');
         $show->is_active('是否激活')->using(['0' => '否', '1' => '是']);
         $show->level_a('一级分销代理人')->as(function ($value) {
-            return ($value == 0) ? '无' : $value;
+            return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
         });
         $show->level_b('二级分销代理人')->as(function ($value) {
-            return ($value == 0) ? '无' : $value;
+            return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
         });
         $show->level_c('三级分销代理人')->as(function ($value) {
-            return ($value == 0) ? '无' : $value;
+            return ($value == 0) ? '无代理人' : Consumer::where('id', $value)->value('mobile');
         });
-        $show->create_time('创建时间');
-        $show->real_time('实名时间');
-        $show->active_time('激活时间');
+        $show->create_time('创建时间')->as(function ($value) {
+            return date('Y-m-d H:i:s', $value);
+        });
+        $show->real_time('实名时间')->as(function ($value) {
+            return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+        });
+        $show->active_time('激活时间')->as(function ($value) {
+            return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+        });
         $show->promote('用户推广码');
         $show->panel()->tools(function ($tools) {
                 $tools->disableDelete();
@@ -167,7 +172,9 @@ class ConsumerController extends Controller
             $bank->id('ID');
             $bank->bank_name('所属银行');
             $bank->bank_card('银行卡号');
-            $bank->create_time('添加时间');
+            $bank->create_time('添加时间')->display(function ($value) {
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+            });
             $bank->is_del('是否删除')->using(['0' => '否', '1' => '是']);
             $bank->is_default('是否默认')->using(['0' => '否', '1' => '是']);
             $bank->disableCreateButton();
@@ -188,17 +195,19 @@ class ConsumerController extends Controller
             $address->resource('/admin/comments');
 
             $address->id('ID');
-            $address->province_id('省')->as(function ($info) {
+            $address->province_id('省')->display(function ($info) {
                 return DB::table('areas')->where('ad_code', $info)->value('name');
             });
-            $address->city_id('市')->as(function ($info) {
+            $address->city_id('市')->display(function ($info) {
                 return DB::table('areas')->where('ad_code', $info)->value('name');
             });;
-            $address->area_id('区')->as(function ($info) {
+            $address->area_id('区')->display(function ($info) {
                 return DB::table('areas')->where('ad_code', $info)->value('name');
             });;
             $address->address('添加时间');
-            $address->create_time('添加时间');
+            $address->create_time('添加时间')->display(function ($value) {
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+            });
             $address->is_del('是否删除')->using(['0' => '否', '1' => '是']);
             $address->is_default('是否默认')->using(['0' => '否', '1' => '是']);
             $address->disableCreateButton();

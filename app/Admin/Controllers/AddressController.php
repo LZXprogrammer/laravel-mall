@@ -51,7 +51,9 @@ class AddressController extends Controller
                 return DB::table('areas')->where('ad_code', $value)->value('name');
             });
             $grid->address('详细地址');
-            $grid->create_time('添加时间');
+            $grid->create_time('添加时间')->display(function ($value) {
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+            });
             $grid->is_default('是否默认')->display(function ($value) {
                 return ($value==1) ? '是' : '否';
             });

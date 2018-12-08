@@ -45,7 +45,9 @@ class BankController extends Controller
             });
             $grid->bank_name('银行卡名称');
             $grid->bank_card('银行卡号');
-            $grid->create_time('创建时间');
+            $grid->create_time('创建时间')->display(function ($value) {
+                return (empty($value)) ? '' : date('Y-m-d H:i:s', $value);
+            });
             $grid->is_del('是否删除')->display(function ($value) {
                 return ($value==1) ? '是' : '否';
             });
