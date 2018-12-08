@@ -118,10 +118,15 @@ class OrderController extends Controller
 
         // 该笔订单收货地址
         $address = HarvestAddress::where('id', $request->address_id)->first();
+
+        $address_arr['address'] = $address->full_address;
+        $address_arr['phone'] = $address->phone;
+        $address_arr['name'] = $address->name;
+
         // 整合订单需要字段
         $order = [
             'no' => 'POS'.date('Ymd').substr(microtime(true),0,10),
-            'address' => $address->full_address,
+            'address' => json_encode($address_arr),
             'c_id' => $request->session()->get('uid'),
             'total_amount' => $total_amount,
             'remark' => $request->remark,
