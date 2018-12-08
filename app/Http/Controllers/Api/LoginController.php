@@ -39,7 +39,7 @@ class LoginController extends Controller
 
         //更新用户登陆信息
         session()->put('uid', $ui->id);
-        session()->save();
+
         $user = Consumer::where('mobile', $mobile)->update(['last_login_time' => time()]);
 
         //增加用户登陆日志
