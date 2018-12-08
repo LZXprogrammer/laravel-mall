@@ -74,7 +74,7 @@ class UserController extends Controller
                 $res['province_id'] = $v['province_id'];
                 $res['city_id'] = $v['city_id'];
                 $res['area_id'] = $v['area_id'];
-                $res['address'] = $v['province']['name'].' '.$v['province']['name'].' '.$v['province']['name'].' '.$v['address'];
+                $res['address'] = $v['province']['name'].' '.$v['city']['name'].' '.$v['area']['name'].' '.$v['address'];
                 //$res['is_default'] = $v['is_default'];
                 $list[] = $res;
             }
