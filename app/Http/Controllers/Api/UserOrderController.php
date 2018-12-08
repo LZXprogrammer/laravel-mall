@@ -25,7 +25,7 @@ class UserOrderController extends Controller
 
         $pages = Config::get('systems.defaultPage');
         $info = $id = $items = [];
-        $ret = ['current_page'=>$page,'data'=>array()];
+        $ret = ['current_page'=>$page,'items'=>array()];
 
         switch ($status) {
             case 'all':
@@ -81,9 +81,11 @@ class UserOrderController extends Controller
             $res['price'] = $v['price'];          //单价
             $items[$v['orders']['id']]['goods_sku'][] = $res;
         }
-        $ret['data'] = $items;
+        sort($items);
+        $ret['items'] = $items;
 
-        return ['code'=>1,'message'=>'请求成功','data'=>$ret];
+
+        return ['code'=>1,'message'=>'请求成功','data'=> $ret];
     }
 
     /**
@@ -127,7 +129,7 @@ class UserOrderController extends Controller
         //获取参数
         $id = $request->get('id');
 
-        $order = Order::where('id', $id)->where('c_id', session('uid'))->where('is_del', '0')->first();
+        $order = Order::where('id', $id)->where('c_id', session('uid'))->where('is_del', '1')->first();
         if(empty($order)) {
             return ['code'=>'0', 'message'=>'订单不存在', 'data'=>''];
         }
