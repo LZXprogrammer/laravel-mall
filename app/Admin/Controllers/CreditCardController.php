@@ -96,6 +96,7 @@ class CreditCardController extends Controller
             $form->text('name', '信用卡名称')->rules('required');
             $form->editor('content', '信用卡详情')->rules('required');
             $form->number('desc', '排序')->rules('required');
+            $form->image('picture', '信用卡图片')->rules('image');
             $form->hidden('create_time')->default(time());
 
             // 定义事件回调，当模型即将保存时会触发这个回调
