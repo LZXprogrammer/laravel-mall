@@ -35,7 +35,7 @@ class UsersListController extends Controller
                 break;
         }
 
-        return ['code' => '1', 'message' => '请求成功', 'data' => $user];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $user];
     }
 
 
