@@ -25,6 +25,7 @@ Route::group(['prefix' => 'login', 'namespace' => 'Api'], function () {
     Route::post('/fgPassWord', 'LoginController@forgotPassword')->middleware(['mobile', 'fgPwd', 'code']);
 });
 
+// 信用卡
 Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'CreditController@creditBanner');
     Route::get('/list', 'CreditController@creditList');
@@ -32,6 +33,7 @@ Route::group(['prefix' => 'credit', 'namespace' => 'Api'], function () {
     Route::get('/comment', 'CreditController@creditComment');
 });
 
+// 首页
 Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
     Route::get('/banner', 'HomeController@homeBanner');
     Route::get('/goodlists', 'HomeController@homeGoodLists');
@@ -40,13 +42,16 @@ Route::group(['prefix' => 'home', 'namespace' => 'Api'], function () {
 //发送短信路由
 Route::post('/sendSms', 'Api\SmsController@index');
 
+// 商品
 Route::group(['prefix' => 'goods', 'namespace' => 'Api'], function () {
     Route::get('/detail', 'GoodsDetailController@goodsDetail');
     Route::get('/comment/{id}', 'GoodsDetailController@goodsComment');
 });
 
-
+// 验证当前用户保持登陆状态
 Route::group(['middleware' => 'user'], function () {
+
+    // 个人中心 -- 我的设置
     Route::group(['prefix' => 'users', 'namespace' => 'Api'], function () {
         Route::post('/home', 'UserController@index');
         Route::post('/address', 'UserController@addressList');
@@ -59,11 +64,13 @@ Route::group(['middleware' => 'user'], function () {
         Route::get('/listsUser', 'UsersListController@index')->middleware('level');
     });
     
+    // 购物车
     Route::group(['prefix' => 'cart', 'namespace' => 'Api'], function () {
         Route::post('/add', 'CartController@cartAdd');
         Route::post('/list', 'CartController@cartList');
     });
 
+    // 购物车结算下单、立即购买下单，提交订单
     Route::group(['prefix' => 'order', 'namespace' => 'Api'], function () {
 
         Route::post('/address', 'OrderController@orderAddress');
@@ -73,6 +80,7 @@ Route::group(['middleware' => 'user'], function () {
 
     });
 
+    // 个人中心 -- 我的订单
     Route::group(['prefix' => 'orders', 'namespace' => 'Api'], function () {
         Route::get('/index', 'UserOrderController@index');
         Route::post('/ordersCancel', 'UserOrderController@cancelOrder')->middleware('id');
