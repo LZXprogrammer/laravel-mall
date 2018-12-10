@@ -95,8 +95,10 @@ class CreditCardController extends Controller
             });
             $form->text('name', '信用卡名称')->rules('required');
             $form->editor('content', '信用卡详情')->rules('required');
-            $form->number('desc', '排序')->rules('required');
-            $form->image('picture', '信用卡图片')->rules('image');
+            $form->number('sort', '排序')->default('99');
+            $form->image('picture', '信用卡图片')->rules('required|image');
+            $form->radio('is_hot', '是否热卡')->options(['1' => '是', '0'=> '否'])->default('0');
+            $form->radio('is_new', '是否最新')->options(['1' => '是', '0'=> '否'])->default('0');
             $form->hidden('create_time')->default(time());
 
             // 定义事件回调，当模型即将保存时会触发这个回调

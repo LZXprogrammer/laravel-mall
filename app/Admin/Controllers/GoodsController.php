@@ -121,7 +121,7 @@ class GoodsController extends Controller
                 return $array;
             });
             $form->radio('is_show', '是否显示')->options(['1' => '是', '0'=> '否'])->default('0');
-            $form->number('desc', '排序')->placeholder('数值越大越靠前');
+            $form->number('sort', '排序')->placeholder('数值越大越靠前');
             //单图上传
             $form->image('show_pic', '展示图片')->rules('required|image');
             $form->hidden('create_time')->value(time());
