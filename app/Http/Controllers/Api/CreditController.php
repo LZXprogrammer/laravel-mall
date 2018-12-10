@@ -93,30 +93,28 @@ class CreditController extends Controller
         $comments = Comment::where('credit_id', $credit_id)
                             ->with(['consumer', 'comment_replies'])
                             ->get();
-    
+
         if(empty($comments->toArray())){
             return ['code' => 0, 'message' => '该信用卡下没有评论', 'data' => ''];
         }
-        $infos = [];
 
+        $infos = [];
         foreach ($comments as $key => $comment) {
+            // 下面是评论
             $infos[$key]['comment_id'] = $comment->id;
             $infos[$key]['credit_id'] = $comment->credit_id;
             $infos[$key]['content'] = $comment->content;
             $infos[$key]['status'] = $comment->status;
             $infos[$key]['create_time'] = date('Y-m-d H:i', $comment->create_time);
 
-            // foreach ($comment as $kk => $consumer) {
-            //     var_dump($consumer);
-            // }
             $infos[$key]['consumer']['c_id'] = $comment->consumer->id;
             $infos[$key]['consumer']['nick_name'] = $comment->consumer->nick_name ?? $comment->consumer->mobile;
             $infos[$key]['consumer']['avatar'] = $comment->consumer->avatar;
             $infos[$key]['consumer']['real_name'] = $comment->consumer->real_name;
-            
-            // var_dump($comment['comment_replies']);
+            $infos[$key]['comment_reply'] = [];
 
             foreach ($comment->comment_replies as $kk => $comment_reply) {
+                // 回复评论
                 if($comment_reply->reply_type == '1') {
                     $infos[$key]['comment_reply'][$kk]['reply_id'] = $comment_reply->id;
                     $infos[$key]['comment_reply'][$kk]['to_cid'] = $comment_reply->to_cid;
@@ -125,34 +123,34 @@ class CreditController extends Controller
                     $infos[$key]['comment_reply'][$kk]['from_avatar'] = $comment_reply->from_avatar;
                     $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
                     $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
-                    $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                    $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment_reply->create_time);
                     $infos[$key]['comment_reply'][$kk]['reply_to_reply'] = [];
                 }
             }
-
-            foreach ($infos[$key]['comment_reply'] as $kk => $vv) {
-                foreach ($comment->comment_replies as $kkk => $vvv) {
-                    if($vvv->reply_type == '2') {
-                        if($vv['from_cid'] == $vvv->to_cid) {
-                            $res['reply_id'] = $vvv->id;
-                            $res['to_cid'] = $vvv->to_cid;
-                            $res['from_cid'] = $vvv->from_cid;
-                            $res['from_nickname'] = $vvv->from_nickname;
-                            $res['from_avatar'] = $vvv->from_avatar;
-                            $res['reply_type'] = $vvv->reply_type;
-                            $res['content'] = $vvv->content;
-                            $res['reply_time'] = date('Y-m-d H:i', $vvv->create_time);
-                            $infos[$key]['comment_reply'][$kk]['reply_to_reply'][] = $res;
+            
+            if(!empty($infos[$key]['comment_reply'])) {
+                foreach ($infos[$key]['comment_reply'] as $kk => $vv) {
+                    foreach ($comment->comment_replies as $kkk => $vvv) {
+                        // 回复他人的回复
+                        if($vvv->reply_type == '2') {
+                            if($vv['from_cid'] == $vvv->to_cid) {
+                                $res['reply_id'] = $vvv->id;
+                                $res['to_cid'] = $vvv->to_cid;
+                                $res['from_cid'] = $vvv->from_cid;
+                                $res['from_nickname'] = $vvv->from_nickname;
+                                $res['from_avatar'] = $vvv->from_avatar;
+                                $res['reply_type'] = $vvv->reply_type;
+                                $res['content'] = $vvv->content;
+                                $res['reply_time'] = date('Y-m-d H:i', $vvv->create_time);
+                                $infos[$key]['comment_reply'][$kk]['reply_to_reply'][] = $res;
+                            }
                         }
                     }
                 }
             }
         }
         // die;
-        return $infos;
-
-        // return ['code' => 1, 'message' => '请求信用卡评论成功', 'comments_num' => $comments_num, 'data' => $infos];
-
+        // return $infos;
+        return ['code' => 1, 'message' => '请求信用卡评论成功', 'data' => $infos];
     }
-
 }
