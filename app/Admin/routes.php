@@ -65,4 +65,6 @@ Route::group([
     $router->put('article/{id}', 'ArticleController@update');
     $router->get('article/create', 'ArticleController@create');
     $router->post('article', 'ArticleController@store');
+    // 订单列表
+    $router->get('orders', 'OrdersController@index');
 });

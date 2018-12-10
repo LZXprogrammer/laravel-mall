@@ -99,10 +99,8 @@ class UserController extends Controller
         $is_default = $request->post('is_default');
 
         if($is_default == '1') {
-            $update = HarvestAddress::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
-            if(!$update) {
-                return ['code' => 0, 'message' => '请求失败', 'data' => ''];
-            }
+            // 更改其他地址默认状态
+            HarvestAddress::where('is_default', '1')->where('c_id', session('uid'))->update(['is_default'=>'0']);
         }
         //判断是创建还是修改
         if(empty($id)) {
