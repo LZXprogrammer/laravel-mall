@@ -88,6 +88,10 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/ordersDetail', 'UserOrderController@detailOrder')->middleware('id');
         Route::post('/orderConfirm', 'UserOrderController@confirmOrder')->middleware('id');
     });
+
+    Route::group(['prefix' => 'pay', 'namespace' => 'Api'], function () {
+        Route::get('/aliPay', 'PayController@aliPay')->middleware('id');
+    });
 });
 
 
