@@ -120,60 +120,20 @@ class CreditController extends Controller
             // var_dump($comment['comment_replies']);
 
             foreach ($comment->comment_replies as $kk => $comment_reply) {
-                // var_dump($comment_reply);
-                if($comment_reply->reply_type == 1){
-                    $infos[$key]['comment_reply'][$kk]['reply_id'] = $comment_reply->id;
-                    $infos[$key]['comment_reply'][$kk]['to_cid'] = $comment_reply->to_cid;
-                    $infos[$key]['comment_reply'][$kk]['from_cid'] = $comment_reply->from_cid;
-                    $infos[$key]['comment_reply'][$kk]['from_nickname'] = $comment_reply->from_nickname;
-                    $infos[$key]['comment_reply'][$kk]['from_avatar'] = $comment_reply->from_avatar;
-                    $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
-                    $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
-                    $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
-                    // $infos[$key]['comment_reply'][$kk]['reply_replies'] = [];
 
-                }else{
-
-                    // $reply_replies = [];
-                    // foreach ($comment->comment_replies as $kkk => $vvv) {
-                    //     $infos[$key]['comment_reply'][$kk]['reply_replies'][$kkk]['reply_id'] = $vvv->id;
-                    // }
-
-                }
+                $infos[$key]['comment_reply'][$kk]['reply_id'] = $comment_reply->id;
+                $infos[$key]['comment_reply'][$kk]['to_cid'] = $comment_reply->to_cid;
+                $infos[$key]['comment_reply'][$kk]['from_cid'] = $comment_reply->from_cid;
+                $infos[$key]['comment_reply'][$kk]['from_nickname'] = $comment_reply->from_nickname;
+                $infos[$key]['comment_reply'][$kk]['from_avatar'] = $comment_reply->from_avatar;
+                $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
+                $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
+                $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
             }
             
         }
         // die;
         return $infos;
-
-
-        // $replies = 
-        // die;
-
-        // 拼接返回参数
-//         $comments_num = count($comments);
-//         foreach ($comments as $key => $value) {
-
-//             $replies = CommentReply::where('comment_id', $value->id)->get();
-// // var_dump($replies);
-//             foreach ($replies as $k => $reply) {
-//                 // var_dump($reply);
-//                 $replies[$k]['id'] =  $reply->id;
-//                 $replies[$k]['comment_id'] =  $reply->comment_id;
-//                 $replies[$k]['content'] =  $reply->content;
-//                 $replies[$k]['from_cid'] =  $reply->from_cid;
-//                 $replies[$k]['from_avatar'] =  $reply->from_avatar;
-//                 $replies[$k]['from_nickname'] =  $reply->from_nickname;
-//             }
-//             $infos[] = Consumer::where('id', $value->c_id)->select(['nick_name', 'avatar'])->first();
-//             $infos[$key]['id'] = $value->id;
-//             $infos[$key]['c_id'] = $value->c_id;
-//             $infos[$key]['content'] = $value->content;
-//             $infos[$key]['create_time'] = date('Y-m-d H:i', $value->create_time);
-//             $infos[$key]['replies'] = $replies;
-//         }
-// // die;
-//         return $infos;
 
         // return ['code' => 1, 'message' => '请求信用卡评论成功', 'comments_num' => $comments_num, 'data' => $infos];
 
