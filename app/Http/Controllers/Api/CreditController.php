@@ -100,7 +100,6 @@ class CreditController extends Controller
         $infos = [];
 
         foreach ($comments as $key => $comment) {
-            // var_dump($comment);
             $infos[$key]['comment_id'] = $comment->id;
             $infos[$key]['credit_id'] = $comment->credit_id;
             $infos[$key]['content'] = $comment->content;
@@ -133,16 +132,16 @@ class CreditController extends Controller
 
             foreach ($infos[$key]['comment_reply'] as $kk => $vv) {
                 foreach ($comment->comment_replies as $kkk => $vvv) {
-                    if($comment_reply->reply_type == '2') {
+                    if($vvv->reply_type == '2') {
                         if($vv['from_cid'] == $vvv->to_cid) {
-                            $res['reply_id'] = $comment_reply->id;
-                            $res['to_cid'] = $comment_reply->to_cid;
-                            $res['from_cid'] = $comment_reply->from_cid;
-                            $res['from_nickname'] = $comment_reply->from_nickname;
-                            $res['from_avatar'] = $comment_reply->from_avatar;
-                            $res['reply_type'] = $comment_reply->reply_type;
-                            $res['content'] = $comment_reply->content;
-                            $res['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                            $res['reply_id'] = $vvv->id;
+                            $res['to_cid'] = $vvv->to_cid;
+                            $res['from_cid'] = $vvv->from_cid;
+                            $res['from_nickname'] = $vvv->from_nickname;
+                            $res['from_avatar'] = $vvv->from_avatar;
+                            $res['reply_type'] = $vvv->reply_type;
+                            $res['content'] = $vvv->content;
+                            $res['reply_time'] = date('Y-m-d H:i', $vvv->create_time);
                             $infos[$key]['comment_reply'][$kk]['reply_to_reply'][] = $res;
                         }
                     }
