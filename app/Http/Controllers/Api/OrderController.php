@@ -86,17 +86,12 @@ class OrderController extends Controller
             if(!$cart){
                 return ['code' => 0, 'message' => '传来的cart_id不存在', 'data' => 'cart_id: '.$value['cart_id']];
             }
-            $total = 0;
-            // $total += $value['amount'] * $cart->price;
+            
             $infos[$cart->g_id]['g_id'] = $cart->g_id;
             $infos[$cart->g_id]['name'] = $cart->name;
             $infos[$cart->g_id]['show_pic'] = $cart->show_pic;
             $infos[$cart->g_id]['category'] = $cart->category;
-            $infos[$cart->g_id]['price'] = $cart->price;
-            // $infos[$cart->g_id]['total'] = $total;
-           
-            
-            // $infos[$cart->g_id]['courier_fees'] = $cart->courier_fees;
+            $infos[$cart->g_id]['total'] = $total = 0; 
             
             // 运费 = 当前这笔订单中,多个商品的运费取最大值
             $courier_fees[] = $cart->courier_fees;
@@ -105,16 +100,19 @@ class OrderController extends Controller
             $g_sku['trad_channel'] = $cart->trad_channel;
             $g_sku['amount'] = $value['amount'];
             $g_sku['price'] = $cart->price;
-            $g_sku['total'] = $value['amount'] * $cart->price;
+            $g_sku['total'] = sprintf("%.2f", $value['amount'] * $cart->price);
             $g_sku['extra'] = $cart->extra;
-
+ 
             $infos[$cart->g_id]['g_sku'][] = $g_sku;
-            // $total = $g_sku['amount'] * $g_sku['price'];
-            // var_dump($total);
-            $infos[$cart->g_id]['total'] = $total;
+
+            // 计算同一商品下多个sku的总价
+            foreach ($infos[$cart->g_id]['g_sku'] as $key => $value) {
+                $total += $value['total'];
+            }
+            $infos[$cart->g_id]['total'] += $total;
+            $infos[$cart->g_id]['total'] = sprintf("%.2f", $infos[$cart->g_id]['total']);
         }
-        return $infos;
-        // die;
+
         return ['code' => 1, 'message' => '获取商品信息成功', 'courier_fees' => max($courier_fees), 'data' => array_merge($infos)];
     }
 
