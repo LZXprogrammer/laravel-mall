@@ -78,6 +78,17 @@ class ConsumerController extends Controller
                 $actions->disableDelete();
             });
 
+            $grid->filter(function($filter){
+
+                // 去掉默认的id过滤器
+                $filter->disableIdFilter();
+
+                // 在这里添加字段过滤器
+                $filter->like('mobile', '用户账号');
+            });
+
+            $grid->model()->orderBy('create_time', 'desc');
+
             $grid->disableCreateButton();
 
             $grid->tools(function ($tools) {

@@ -59,12 +59,14 @@ class ArticleController extends Controller
                 return ($value == '1') ? 'banner' : '指南链接';
             });
             $grid->url('跳转url')->style('max-width:300px;word-break:break-all;');
-            $grid->show_time('显示时间')->display(function ($value) {
-                return date('Y-m-d H:i:s', $value);
-            });
-            $grid->end_time('结束时间')->display(function ($value) {
-                return date('Y-m-d H:i:s', $value);
-            });
+//            $grid->show_time('显示时间')->display(function ($value) {
+//                return date('Y-m-d H:i:s', $value);
+//            });
+//            $grid->end_time('结束时间')->display(function ($value) {
+//                return date('Y-m-d H:i:s', $value);
+//            });
+            $grid->show_time('显示时间');
+            $grid->end_time('结束时间');
             $grid->is_show('是否显示')->display(function ($value) {
                 return ($value==1) ? '是' : '否';
             });

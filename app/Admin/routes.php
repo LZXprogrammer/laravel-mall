@@ -60,6 +60,7 @@ Route::group([
     $router->post('credit_type', 'CreditTypeController@store');
     //文章列表路由
     $router->get('article', 'ArticleController@index');
+    $router->delete('article/{id}', 'ArticleController@destroy');
     $router->get('article/{id}/edit', 'ArticleController@edit');
     $router->put('article/{id}', 'ArticleController@update');
     $router->get('article/create', 'ArticleController@create');
