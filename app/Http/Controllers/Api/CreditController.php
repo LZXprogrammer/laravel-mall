@@ -88,9 +88,9 @@ class CreditController extends Controller
      */
     public function creditComment(Request $request)
     {   
-        $card_id = $request->has('id') ? $request->id : 0;
+        $credit_id = $request->has('id') ? $request->id : 0;
 
-        $comments = Comment::where('credit_id', $card_id)
+        $comments = Comment::where('credit_id', $credit_id)
                             ->with(['consumer', 'comment_replies'])
                             ->get();
 
@@ -130,14 +130,16 @@ class CreditController extends Controller
                     $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
                     $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
                     $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                    // $infos[$key]['comment_reply'][$kk]['reply_replies'] = [];
 
                 }else{
-                    // foreach ($variable as $key => $value) {
-                    //     # code...
-                    // }
-                }
-                
 
+                    // $reply_replies = [];
+                    // foreach ($comment->comment_replies as $kkk => $vvv) {
+                    //     $infos[$key]['comment_reply'][$kk]['reply_replies'][$kkk]['reply_id'] = $vvv->id;
+                    // }
+
+                }
             }
             
         }
@@ -175,11 +177,6 @@ class CreditController extends Controller
 
         // return ['code' => 1, 'message' => '请求信用卡评论成功', 'comments_num' => $comments_num, 'data' => $infos];
 
-        
-    
-    
-    
-    
     }
 
 }
