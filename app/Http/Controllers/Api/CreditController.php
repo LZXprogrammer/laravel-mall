@@ -93,8 +93,6 @@ class CreditController extends Controller
         $comments = Comment::where('credit_id', $credit_id)
                             ->with(['consumer', 'comment_replies'])
                             ->get();
-
-        // return $comments;
     
         if(empty($comments->toArray())){
             return ['code' => 0, 'message' => '该信用卡下没有评论', 'data' => ''];
@@ -120,17 +118,36 @@ class CreditController extends Controller
             // var_dump($comment['comment_replies']);
 
             foreach ($comment->comment_replies as $kk => $comment_reply) {
-
-                $infos[$key]['comment_reply'][$kk]['reply_id'] = $comment_reply->id;
-                $infos[$key]['comment_reply'][$kk]['to_cid'] = $comment_reply->to_cid;
-                $infos[$key]['comment_reply'][$kk]['from_cid'] = $comment_reply->from_cid;
-                $infos[$key]['comment_reply'][$kk]['from_nickname'] = $comment_reply->from_nickname;
-                $infos[$key]['comment_reply'][$kk]['from_avatar'] = $comment_reply->from_avatar;
-                $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
-                $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
-                $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                if($comment_reply->reply_type == '1') {
+                    $infos[$key]['comment_reply'][$kk]['reply_id'] = $comment_reply->id;
+                    $infos[$key]['comment_reply'][$kk]['to_cid'] = $comment_reply->to_cid;
+                    $infos[$key]['comment_reply'][$kk]['from_cid'] = $comment_reply->from_cid;
+                    $infos[$key]['comment_reply'][$kk]['from_nickname'] = $comment_reply->from_nickname;
+                    $infos[$key]['comment_reply'][$kk]['from_avatar'] = $comment_reply->from_avatar;
+                    $infos[$key]['comment_reply'][$kk]['reply_type'] = $comment_reply->reply_type;
+                    $infos[$key]['comment_reply'][$kk]['content'] = $comment_reply->content;
+                    $infos[$key]['comment_reply'][$kk]['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                    $infos[$key]['comment_reply'][$kk]['reply_to_reply'] = [];
+                }
             }
-            
+
+            foreach ($infos[$key]['comment_reply'] as $kk => $vv) {
+                foreach ($comment->comment_replies as $kkk => $vvv) {
+                    if($comment_reply->reply_type == '2') {
+                        if($vv['from_cid'] == $vvv->to_cid) {
+                            $res['reply_id'] = $comment_reply->id;
+                            $res['to_cid'] = $comment_reply->to_cid;
+                            $res['from_cid'] = $comment_reply->from_cid;
+                            $res['from_nickname'] = $comment_reply->from_nickname;
+                            $res['from_avatar'] = $comment_reply->from_avatar;
+                            $res['reply_type'] = $comment_reply->reply_type;
+                            $res['content'] = $comment_reply->content;
+                            $res['reply_time'] = date('Y-m-d H:i', $comment->create_time);
+                            $infos[$key]['comment_reply'][$kk]['reply_to_reply'][] = $res;
+                        }
+                    }
+                }
+            }
         }
         // die;
         return $infos;
