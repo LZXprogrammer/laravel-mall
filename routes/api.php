@@ -91,6 +91,8 @@ Route::group(['middleware' => 'user'], function () {
 
     Route::group(['prefix' => 'pay', 'namespace' => 'Api'], function () {
         Route::get('/aliPay', 'PayController@aliPay')->middleware('id');
+        Route::get('/alipayReturn', 'PayController@alipayReturn')->name('pay.alipay.return');
+        Route::get('/alipayNotify', 'PayController@alipayNotify')->name('pay.alipay.notify');
     });
 });
 
