@@ -4,14 +4,16 @@ namespace App\Admin\Controllers;
 
 use App\Models\Article;
 use App\Http\Controllers\Controller;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
-use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
+    use HasResourceActions;
+
     //文章首页
     public function index(Content $content)
     {
@@ -37,7 +39,7 @@ class ArticleController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建信用卡类别');
+            $content->header('创建文章');
             $content->body($this->form());
         });
     }
@@ -59,12 +61,6 @@ class ArticleController extends Controller
                 return ($value == '1') ? 'banner' : '指南链接';
             });
             $grid->url('跳转url')->style('max-width:300px;word-break:break-all;');
-//            $grid->show_time('显示时间')->display(function ($value) {
-//                return date('Y-m-d H:i:s', $value);
-//            });
-//            $grid->end_time('结束时间')->display(function ($value) {
-//                return date('Y-m-d H:i:s', $value);
-//            });
             $grid->show_time('显示时间');
             $grid->end_time('结束时间');
             $grid->is_show('是否显示')->display(function ($value) {
