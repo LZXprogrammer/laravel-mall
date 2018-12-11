@@ -25,11 +25,17 @@ class OrderController extends Controller
     {
         $uid = $request->session()->get('uid');
 
-        $address = HarvestAddress::where('c_id', $uid)->where('is_default', 1)->first();
-        if(!$address){
+        $address_default = HarvestAddress::where('c_id', $uid)->where('is_default', 1)->first();
+        
+        // 没有默认收货地址
+        if(!$address_default){
 
-            return ['code' => 0, 'message' => '当前用户没有收货地址', 'data' => ''];
-        }else{
+            $address = HarvestAddress::where('c_id', $uid)->where('is_default', 0)->first();
+
+            // 没有任何收货地址
+            if(!$address){
+                return ['code' => 0, 'message' => '当前用户没有收货地址', 'data' => ''];
+            }
 
             $province = $address->province()->first();
             $city = $address->city()->first();
@@ -38,9 +44,21 @@ class OrderController extends Controller
             $address->province = $province->toArray()['name'];
             $address->city = $city->toArray()['name'];
             $address->area = $area->toArray()['name'];
-        }      
 
-        return ['code' => 1, 'message' => '获取默认收获地址成功', 'data' => $address];
+            return ['code' => 1, 'message' => '获取收货地址成功', 'data' => $address];
+
+        }else{
+            // 有默认地址返回默认地址
+            $province = $address_default->province()->first();
+            $city = $address_default->city()->first();
+            $area = $address_default->area()->first();
+
+            $address_default->province = $province->toArray()['name'];
+            $address_default->city = $city->toArray()['name'];
+            $address_default->area = $area->toArray()['name'];
+        }
+
+        return ['code' => 1, 'message' => '获取默认收货地址成功', 'data' => $address_default];
     }
 
     /**
