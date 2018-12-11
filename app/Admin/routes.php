@@ -32,12 +32,14 @@ Route::group([
     $router->get('goods/create', 'GoodsController@create');
     $router->post('goods', 'GoodsController@store');
     $router->get('goods/{id}', 'GoodsController@show');
+    $router->delete('goods/{id}', 'GoodsController@destroy');
     //商品系列路由
     $router->get('category', 'CategoryController@index');
     $router->get('category/{id}/edit', 'CategoryController@edit');
     $router->put('category/{id}', 'CategoryController@update');
     $router->get('category/create', 'CategoryController@create');
     $router->post('category', 'CategoryController@store');
+    $router->delete('category/{id}', 'CategoryController@destroy');
     //短信列表路由
     $router->get('message', 'MessageController@index');
     //短信列表路由
@@ -52,12 +54,14 @@ Route::group([
     $router->put('credit_card/{id}', 'CreditCardController@update');
     $router->get('credit_card/create', 'CreditCardController@create');
     $router->post('credit_card', 'CreditCardController@store');
+    $router->delete('credit_card/{id}', 'CreditCardController@destroy');
     //信用卡类别列表路由
     $router->get('credit_type', 'CreditTypeController@index');
     $router->get('credit_type/{id}/edit', 'CreditTypeController@edit');
     $router->put('credit_type/{id}', 'CreditTypeController@update');
     $router->get('credit_type/create', 'CreditTypeController@create');
     $router->post('credit_type', 'CreditTypeController@store');
+    $router->delete('credit_type/{id}', 'CreditTypeController@destroy');
     //文章列表路由
 //    $router->resource('article', 'ArticleController', ['except' => [
 //        'index', 'create', 'store', 'update', 'destroy'

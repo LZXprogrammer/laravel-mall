@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Good;
 use App\Http\Controllers\Controller;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class GoodsController extends Controller
 {
+    use HasResourceActions;
+
     //商品首页
     public function index(Content $content)
     {

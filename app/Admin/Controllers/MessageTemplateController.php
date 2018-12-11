@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\MessageTemplate;
 use App\Http\Controllers\Controller;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -11,6 +12,8 @@ use Encore\Admin\Layout\Content;
 
 class MessageTemplateController extends Controller
 {
+    use HasResourceActions;
+
     //短信模板列表首页
     public function index(Content $content)
     {

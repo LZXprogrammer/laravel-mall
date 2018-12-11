@@ -39,7 +39,7 @@ class ArticleController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建信用卡类别');
+            $content->header('创建文章');
             $content->body($this->form());
         });
     }

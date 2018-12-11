@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\GoodCategory;
 use App\Http\Controllers\Controller;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -11,6 +12,8 @@ use Encore\Admin\Layout\Content;
 
 class CategoryController extends Controller
 {
+    use HasResourceActions;
+
     //商品系列
     public function index(Content $content)
     {
