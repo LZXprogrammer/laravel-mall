@@ -59,12 +59,15 @@ Route::group([
     $router->get('credit_type/create', 'CreditTypeController@create');
     $router->post('credit_type', 'CreditTypeController@store');
     //文章列表路由
+//    $router->resource('article', 'ArticleController', ['except' => [
+//        'index', 'create', 'store', 'update', 'destroy'
+//    ]]);
+
     $router->get('article', 'ArticleController@index');
-    $router->delete('article/{id}', 'ArticleController@destroy');
     $router->get('article/{id}/edit', 'ArticleController@edit');
     $router->put('article/{id}', 'ArticleController@update');
     $router->get('article/create', 'ArticleController@create');
     $router->post('article', 'ArticleController@store');
-    // 订单列表
-    $router->get('orders', 'OrdersController@index');
+    $router->delete('article/{id}', 'ArticleController@destroy');
 });
+
