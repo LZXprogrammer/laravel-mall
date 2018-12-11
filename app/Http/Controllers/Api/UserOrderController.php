@@ -172,6 +172,14 @@ class UserOrderController extends Controller
             $items['no'] = $v['orders']['no'];            //订单编号
             $items['status'] = $v['orders']['pay_status'];      //订单状态
             $items['total_amount'] = $v['orders']['total_amount'];        //订单总价
+            $address = json_decode($v['orders']['address'], true);
+            $items['address'] = $address['address'];
+            $items['contact_phone'] = $address['phone'];
+            $items['contact_name'] = $address['name'];
+            $items['create_time'] = $v['orders']['create_time'];
+            $items['paid_time'] = $v['orders']['paid_time'];
+            $items['delivery_time'] = $v['orders']['delivery_time'];
+            $items['clinch_time'] = $v['orders']['clinch_time'];
 
 
             $res['goods_id'] = $v['goods']['id'];           //商品名称
