@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Yansongda\Pay\Pay;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
@@ -30,7 +29,7 @@ class PayController extends Controller
             'total_amount' => '1',
             'subject'      => 'test-subject',
         ];
-        $aliPay = Pay::alipay($config)->wap($config_biz);
-        echo $aliPay;
+        $aliPay = app('alipay')->wap($config_biz);
+        return $aliPay;
     }
 }
