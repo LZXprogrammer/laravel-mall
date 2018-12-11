@@ -25,12 +25,12 @@ class OrderController extends Controller
     {
         $uid = $request->session()->get('uid');
 
-        $address_default = HarvestAddress::where('c_id', $uid)->where('is_default', 1)->first();
+        $address_default = HarvestAddress::where('c_id', $uid)->where('is_default', 1)->where('is_del', 1)->first();
         
         // 没有默认收货地址
         if(!$address_default){
 
-            $address = HarvestAddress::where('c_id', $uid)->where('is_default', 0)->first();
+            $address = HarvestAddress::where('c_id', $uid)->where('is_default', 0)->where('is_del', 1)->first();
 
             // 没有任何收货地址
             if(!$address){
