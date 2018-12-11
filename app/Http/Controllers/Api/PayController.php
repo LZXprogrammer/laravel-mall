@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Good;
-use App\Models\GoodSku;
 use App\Http\Controllers\Controller;
+use Yansongda\Supports\Log;
 
 class PayController extends Controller
 {
@@ -51,7 +51,12 @@ class PayController extends Controller
     public function alipayNotify()
     {
         $data = app('alipay')->verify();
-        \Log::debug('Alipay notify', $data->all());
+        //记录日志
+        Log::info('Alipay notify', $data->all());
+
+        //支付宝返回数据校验
+        $info = $data->all();
+        Log::info('Alipay notify', $info['trade_status']);
     }
 
 
