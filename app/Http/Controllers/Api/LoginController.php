@@ -55,7 +55,7 @@ class LoginController extends Controller
         $info['uid'] = $ui->id;
 
         // 返回用户默认收货地址,若是新用户,默认地址为空
-        $address = HarvestAddress::where('c_id', $ui->id)->where('is_default', 1)->first();
+        $address = HarvestAddress::where('c_id', $ui->id)->where('is_default', 1)->where('is_del', 1)->first();
         if(!$address){
 
             $info['default_address'] = [];
