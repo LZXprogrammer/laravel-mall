@@ -129,7 +129,22 @@ class OrdersController extends Controller
             });
 
             $grid->paid_time('支付时间')->display(function ($value) {
-                return date("Y-m-d H:i:s", $value);
+                if($value){
+                    return date("Y-m-d H:i:s", $value);
+                }
+                return $value;
+                
+            });
+
+            // 数据查询过滤
+            $grid->filter(function($filter){
+
+                // 去掉默认的id过滤器
+                // $filter->disableIdFilter();
+            
+                // 添加字段过滤器
+                $filter->equal('no')->placeholder('请输入订单号');
+                $filter->date('create_time', '下单时间');
             });
 
             // 禁用新增按钮
