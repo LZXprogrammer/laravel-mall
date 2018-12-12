@@ -54,11 +54,11 @@ class PayController extends Controller
     {
         $data = app('alipay')->verify();
         //记录日志
-        \Log::debug('Alipay notify', $data->all());
+        Log::info($data->all());
 
         //支付宝返回数据校验
         $info = $data->all();
-        Log::info('Alipay notify', $info['trade_status']);
+        Log::info('Alipay notify', ['trade_status'=>$info['trade_status'],'out_trade_no'=>$info['out_trade_no'],'trade_no'=>$info['trade_no']]);
         if($info['trade_status'] == 'TRADE_SUCCESS') {
             $this->successfulOrder($info['out_trade_no'], $info['trade_no'], 'alipay');
         }
@@ -94,6 +94,7 @@ class PayController extends Controller
     }
 
     private function successfulOrder($out_trade_no, $trade_no, $type) {
+        Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
         if(!empty($out_trade_no) && $order['pay_status'] == 0 && $order['closed'] == 0) {
             //开始订单支付后操作
@@ -168,7 +169,7 @@ class PayController extends Controller
                     die;
                 }
             }
-
+            Log::info('success notify');
             DB::commit();
         }
     }
