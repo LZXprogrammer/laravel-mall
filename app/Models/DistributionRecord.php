@@ -25,4 +25,12 @@ class DistributionRecord extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * 
+     */
+    public function consumer()
+    {
+        return $this->belongsTo(Consumer::class, 'agency_uid');
+    }
 }
