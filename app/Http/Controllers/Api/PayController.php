@@ -61,6 +61,7 @@ class PayController extends Controller
         Log::info('Alipay notify', ['trade_status'=>$info['trade_status'],'out_trade_no'=>$info['out_trade_no'],'trade_no'=>$info['trade_no']]);
         if($info['trade_status'] == 'TRADE_SUCCESS') {
             $this->successfulOrder($info['out_trade_no'], $info['trade_no'], 'alipay');
+            
         }
     }
 
@@ -119,6 +120,7 @@ class PayController extends Controller
                 'pay_status' => '1',
             ];
             $os = Order::where('id', $order['id'])->update($update);
+            Log::info($os);
             if(!$os) {
                 DB::rollBack();
                 die;
