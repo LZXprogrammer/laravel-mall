@@ -11,58 +11,105 @@
     <table class="table table-bordered">
       <tbody>
       <tr>
-        <td>买家ID：</td>
+        <th>买家ID：</th>
         <td>{{ $order['c_id'] }}</td>
-        <td>买家账号：</td>
+        <th>买家账号：</th>
         <td>{{ $order['mobile'] }}</td>
-        <td>买家用户名：</td>
+        <th>买家用户名：</th>
         <td>{{ $order['nick_name'] }}</td>
-        <td>买家真实名：</td>
+        <th>买家真实名：</th>
         <td>{{ $order['real_name'] }}</td>
       </tr>
       <tr>
-        <td>下单时间：</td>
+        <th>下单时间：</th>
         <td>{{ date('Y-m-d H:i:s', $order['create_time']) }}</td>
-        <td>支付时间：</td>
+        <th>支付时间：</th>
         <td>{{ date('Y-m-d H:i:s', $order['paid_time']) }}</td>
-        <td>支付渠道单号：</td>
-        <td>12312312312312312312312312312312</td>
-        <td>支付方式：</td>
-        <td>wechat</td>
+        <th>支付渠道单号：</th>
+        <td>{{ $order['payment_no'] }}</td>
+        <th>支付方式：</th>
+        <td>{{ $order['payment_method'] }}</td>
       </tr>
       <tr>
-        <td><b>收货地址</b></td>
+        <th><b>收货地址</b></th>
         <td colspan="3">{{ $order['address']['address'] }}</td>
-        <td>收货人</td>
+        <th>收货人</th>
         <td>{{ $order['address']['name'] }}</td>
-        <td>收货人电话</td>
+        <th>收货人电话</th>
         <td>{{ $order['address']['phone'] }}</td>
       </tr>
       <tr>
-        <td rowspan="{{ count($order['goods']) + 1 }}">商品列表</td>
-        
-        <td>商品名称</td>
-        <td>商品图片</td>
-        <td>通道</td>
-        <td>单价</td>
-        <td>数量</td>  
-        <td>小计</td>
+        <th rowspan="{{ count($order['goods']) + 1 }}">商品列表</th>
+        <th>商品名称</th>
+        <th>商品图片</th>
+        <th>商品类别</th>
+        <th>交易渠道</th>
+        <th>单价</th>
+        <th>数量</th>  
+        <th>小计</th>
       </tr>
         @foreach($order['goods'] as $good)
         <tr>
             <td>{{ $good['name'] }}</td>
-            <td>12</td>
-            <td>12</td>
-            <td>{{ $good['price'] }}</td>
+            <td><img src="{{ $good['show_pic'] }}" width="30px;" height="30px;" /></td>
+            <td>
+                @if($good['category'] == 1)
+                    企业pos机
+                @else
+                    个人pos机
+                @endif
+            </td>
+            <td>{{ $good['trad_channel'] }}</td>
+            <td>￥ {{ $good['price'] }}</td>
             <td>{{ $good['amount'] }}</td>
-            <td>{{ $good['price'] * $good['amount'] }}</td>
+            <td>￥ {{ $good['price'] * $good['amount'] }}</td>
         </tr>
         @endforeach
       <tr>
-        <td>订单金额：</td>
-        <td colspan="4">￥ {{ $order['total_amount'] }}</td>
+        <th>订单金额：</th>
+        <td style="color:red;">￥ {{ $order['total_amount'] }}</td>
+        <th>订单备注：</th>
+        <td colspan="4"> {{ $order['remark'] }}</td>
       </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">代理人信息</h3>
+    
+  </div>
+  <div class="box-body">
+    <table class="table table-bordered">
+      <tbody>   
+      <tr>
+        <th>代理人等级</th>
+        <th>代理人ID</th>
+        <th>代理人用户名</th>
+        <th>代理人账号</th>
+        <th>代理人所得金额</th>
+      </tr>
+      @foreach($agents as $key => $agent)
+      <tr>
+        <td>@if($key == 'primary')
+                一级代理
+            @elseif($key == 'second')
+                二级代理
+            @elseif($key == 'three')
+                三级代理
+            @endif
+        </td>
+        <td>{{ $agent['id'] }}</td>
+        <td>{{ $agent['nick_name'] }}</td>
+        <td>{{ $agent['mobile'] }}</td>
+        <td>￥ {{ $agent['agency_amount'] }}</td>
+      </tr>
+      @endforeach
+      </tbody>
+    </table>
+  </div>
+</div>
+

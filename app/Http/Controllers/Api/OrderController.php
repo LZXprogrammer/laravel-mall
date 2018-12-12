@@ -71,7 +71,7 @@ class OrderController extends Controller
     {
         $g_sku_id = $request->has('g_sku_id') ? $request->input('g_sku_id') : 0;
 
-        $goods_sku = GoodSku::where('id', $g_sku_id)->select(['g_id','trad_channel','extra'])->first();
+        $goods_sku = GoodSku::where('id', $g_sku_id)->select(['g_id','trad_channel'])->first();
 
         if(!$goods_sku){
             return ['code' => 0, 'message' => '没有该商品', 'data' => $g_sku_id];
@@ -99,7 +99,7 @@ class OrderController extends Controller
         foreach($cart_infos as $key => $value)
         {
             $cart = Cart::where('id', $value['cart_id'])
-                            ->select(['g_sku_id', 'g_id', 'name', 'trad_channel', 'show_pic', 'category', 'price', 'extra', 'courier_fees'])
+                            ->select(['g_sku_id', 'g_id', 'name', 'trad_channel', 'show_pic', 'category', 'price', 'courier_fees'])
                             ->first();
             if(!$cart){
                 return ['code' => 0, 'message' => '传来的cart_id不存在', 'data' => 'cart_id: '.$value['cart_id']];
@@ -119,7 +119,6 @@ class OrderController extends Controller
             $g_sku['amount'] = $value['amount'];
             $g_sku['price'] = $cart->price;
             $g_sku['total'] = sprintf("%.2f", $value['amount'] * $cart->price);
-            $g_sku['extra'] = $cart->extra;
  
             $infos[$cart->g_id]['g_sku'][] = $g_sku;
 

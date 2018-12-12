@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Consumer;
 use App\Models\Good;
+use App\Models\DistributionRecord;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -34,53 +35,68 @@ class OrdersController extends Controller
         });
     }
 
-    //查看详情
-    // public function show($id, Content $content)
-    // {
-    //     return $content
-    //         ->header('订单详情')
-    //         ->description('详情')
-    //         ->body($this->detail($id));
-    // }
-
+    /**
+     *  查看订单详情
+     * 
+     * @param Model $order
+     * @return Array 
+     */
     public function show(Order $order)
     {
         return Admin::content(function (Content $content) use ($order) {
             $content->header('查看订单');
-            $infos = [];
-            // var_dump($order);die;
+
+            $order_infos = [];
+            // 下单用户
             $consumer = Consumer::where('id', $order->c_id)->select(['nick_name', 'mobile', 'real_name'])->first();
-
-            // $aa = array_merge($order->toArray(), $consumer->toArray());
-            $infos['nick_name'] = $consumer->nick_name;
-            $infos['real_name'] = $consumer->real_name;
-            $infos['mobile'] = $consumer->mobile;
+            $order_infos['nick_name'] = $consumer->nick_name;
+            $order_infos['real_name'] = $consumer->real_name;
+            $order_infos['mobile'] = $consumer->mobile;
             
+            // 订单字表联合商品表、商品字表查询
             $order_items = OrderItem::where('order_id', $order->id)->with('goods', 'goods_sku')->get();
-            // $products = [];
             foreach ($order_items as $key => $order_item) {
-                // $products = Good::where('id', $order_item->product_id)->with('sku')->first();
-                // foreach ($order_item->goods as $k => $good) {
-                //     var_dump($good);
-                // }
-                $infos['goods'][$order_item->product_sku_id]['price']  = $order_item->price;
-                $infos['goods'][$order_item->product_sku_id]['amount'] = $order_item->amount;
-                $infos['goods'][$order_item->product_sku_id]['name'] = $order_item->goods->name;
-                $infos['goods'][$order_item->product_sku_id]['g_id'] = $order_item->goods->id;
-                $infos['goods'][$order_item->product_sku_id]['g_sku_id'] = $order_item->goods_sku->id;
-                $infos['goods'][$order_item->product_sku_id]['extra'] = $order_item->goods_sku->extra;
-                // var_dump($order_item->price);
-                // var_dump($order_item->goods);
+                // var_dump($order_item->goods_sku);
+                $order_infos['goods'][$order_item->product_sku_id]['price']  = $order_item->price;
+                $order_infos['goods'][$order_item->product_sku_id]['amount'] = $order_item->amount;
+                $order_infos['goods'][$order_item->product_sku_id]['name'] = $order_item->goods->name;
+                $order_infos['goods'][$order_item->product_sku_id]['show_pic'] = $order_item->goods->show_pic;
+                $order_infos['goods'][$order_item->product_sku_id]['g_id'] = $order_item->goods->id;
+                $order_infos['goods'][$order_item->product_sku_id]['category'] = $order_item->goods->category;
+                $order_infos['goods'][$order_item->product_sku_id]['g_sku_id'] = $order_item->goods_sku->id;
+                $order_infos['goods'][$order_item->product_sku_id]['trad_channel'] = $order_item->goods_sku->trad_channel;
             }
+// die;
+            // 把数据库中地址 json 转成数组
             $order->address = json_decode($order->address, true);
-            // var_dump(json_decode($order->address, true));
-            // var_dump(array_merge($infos, $order->toArray()));
-            
-            // die;
 
+            // 代理人信息
+            $agent_infos = $users = [];
+            $agent_records = DistributionRecord::where('order_id', $order->id)->with('consumer')->get();           
+            foreach ($agent_records as $key => $agent_record) {
+                // 用户存在才返回
+                if($agent_record->consumer){
+                    $users['id'] = $agent_record->consumer->id;
+                    $users['mobile'] = $agent_record->consumer->mobile;
+                    $users['nick_name'] = $agent_record->consumer->nick_name;
+                    $users['agency_amount'] = $agent_record->agency_amount;
 
+                    // 代理等级 1：一级代理 2：二级代理 3：三级代理
+                    switch ($agent_record->level) {
+                        case 1:
+                            $agent_infos['primary'] = $users;
+                            break;
+                        case 2:
+                            $agent_infos['second'] = $users;
+                            break;
+                        case 3:
+                            $agent_infos['three'] = $users;
+                            break;
+                    }
+                }             
+            }
             // body 方法可以接受 Laravel 的视图作为参数
-            $content->body(view('admin.orders.show', ['order' => array_merge($infos, $order->toArray())]));
+            $content->body(view('admin.orders.show', ['order' => array_merge($order_infos, $order->toArray()), 'agents' => $agent_infos]));
         });
     }
 
@@ -126,38 +142,4 @@ class OrdersController extends Controller
         });
     }
 
-    /**
-     * 商品详情
-     *
-     * @param mixed   $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(Order::findOrFail($id));
-
-        $show->id('ID');
-        $show->no('订单号');
-        $show->c_id('用户ID');
-        $show->address('此订单收货地址')->as(function ($info) {
-            // $info = json_decode($info, true);
-            return $info;
-        });
-        $show->total_amount('此订单总金额');
-        $show->remark('订单备注');
-        $show->create_time('下单时间');
-        $show->payment_no('支付交易号');
-        $show->payment_method('支付方式');
-        $show->paid_time('支付时间');
-        $show->pay_status('订单状态');
-        $show->closed_reason('订单取消原因');
-        $show->ship_status('物流状态');
-        $show->ship_data('物流数据');
-        $show->delivery_time('发货时间');
-        $show->clinch_time('成交时间');
-        $show->reviewed('订单是否已评价');
-
-        // return view('admin.orders.show', ['order' => $show->toArray()]);
-        return $show;
-    }
 }
