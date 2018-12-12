@@ -34,11 +34,9 @@ class PayController extends Controller
         }
         //生成请求数据
         $request_data = [
-            'body'         => $order['body'],
             'subject'      => 'POS支付商城',
             'out_trade_no' => $order['no'],
             'total_amount' => $order['total_amount'],
-            'goods_type'   => '1',
         ];
         //发送请求
         return app('alipay')->wap($request_data);
