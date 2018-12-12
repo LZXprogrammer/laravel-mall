@@ -47,27 +47,40 @@ class OrdersController extends Controller
     {
         return Admin::content(function (Content $content) use ($order) {
             $content->header('查看订单');
-
+            $infos = [];
             // var_dump($order);die;
-            $consumer = Consumer::where('id', $order->c_id)->select(['nick_name', 'mobile'])->first();
+            $consumer = Consumer::where('id', $order->c_id)->select(['nick_name', 'mobile', 'real_name'])->first();
 
             // $aa = array_merge($order->toArray(), $consumer->toArray());
+            $infos['nick_name'] = $consumer->nick_name;
+            $infos['real_name'] = $consumer->real_name;
+            $infos['mobile'] = $consumer->mobile;
             
-            $order_items = OrderItem::where('order_id', $order->id)->select(['product_id', 'product_sku_id', 'amount', 'price'])->get();
+            $order_items = OrderItem::where('order_id', $order->id)->with('goods', 'goods_sku')->get();
             // $products = [];
-            // foreach ($order_items as $key => $order_item) {
-                // $products[] = Good::where('id', $order_item->product_id)->with('sku')->first();
-                // foreach ($products as $k => $product) {
-                //     var_dump($product->sku);
+            foreach ($order_items as $key => $order_item) {
+                // $products = Good::where('id', $order_item->product_id)->with('sku')->first();
+                // foreach ($order_item->goods as $k => $good) {
+                //     var_dump($good);
                 // }
-                var_dump($consumer);
-            // }
+                $infos['goods'][$order_item->product_sku_id]['price']  = $order_item->price;
+                $infos['goods'][$order_item->product_sku_id]['amount'] = $order_item->amount;
+                $infos['goods'][$order_item->product_sku_id]['name'] = $order_item->goods->name;
+                $infos['goods'][$order_item->product_sku_id]['g_id'] = $order_item->goods->id;
+                $infos['goods'][$order_item->product_sku_id]['g_sku_id'] = $order_item->goods_sku->id;
+                $infos['goods'][$order_item->product_sku_id]['extra'] = $order_item->goods_sku->extra;
+                // var_dump($order_item->price);
+                // var_dump($order_item->goods);
+            }
+            $order->address = json_decode($order->address, true);
+            // var_dump(json_decode($order->address, true));
+            // var_dump(array_merge($infos, $order->toArray()));
             
-            die;
+            // die;
 
 
             // body 方法可以接受 Laravel 的视图作为参数
-            $content->body(view('admin.orders.show', ['order' => $order]));
+            $content->body(view('admin.orders.show', ['order' => array_merge($infos, $order->toArray())]));
         });
     }
 
