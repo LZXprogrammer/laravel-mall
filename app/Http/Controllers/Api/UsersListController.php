@@ -21,22 +21,27 @@ class UsersListController extends Controller
 
         $page = Config::get('systems.defaultPage');
         $select = ['mobile', 'avatar', 'nick_name', 'create_time', 'is_active', 'active_time', 'promote'];
+
+        $statistic = Consumer::where('id', session('uid'))->select(['total_users', 'membership_a', 'membership_b', 'membership_c'])->first();
+
         $user = array();
         //进行判断是几级分销代理
         switch ($level) {
             case '1':
-                $user = Consumer::where('level_a', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_a', session('uid'))->select($select)->simplePaginate($page)->toArray();
                 break;
             case '2':
-                $user = Consumer::where('level_b', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_b', session('uid'))->select($select)->simplePaginate($page)->toArray();
                 break;
             case '3':
-                $user = Consumer::where('level_c', session('uid'))->select($select)->simplePaginate($page);
+                $user = Consumer::where('level_c', session('uid'))->select($select)->simplePaginate($page)->toArray();
                 break;
         }
+        //整理数据
+        $info['statistic'] = $statistic;
+        $info['list'] = $user['data'];
+        $info['current_page'] = $user['current_page'];
 
-        return ['code' => 1, 'message' => '请求成功', 'data' => $user];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $info];
     }
-
-
 }

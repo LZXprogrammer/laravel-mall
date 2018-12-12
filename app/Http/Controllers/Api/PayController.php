@@ -149,6 +149,14 @@ class PayController extends Controller
                     $primary_available = ConsumerAccount::where('id', $primary_distribution)->increment('available', $primary_money);
                     $primary_market = ConsumerAccount::where('id', $primary_distribution)->increment('market', $primary_money);
                     $primary_market_a = ConsumerAccount::where('id', $primary_distribution)->increment('market_a', $primary_money);
+                    //插入分销记录表
+                    DistributionRecord::insert([
+                        'order_id' => $order['id'],
+                        'agency_uid' => $primary_distribution,
+                        'agency_amount' => $primary_money,
+                        'level' => '1',
+                        'create_time' => time()
+                    ]);
                     if(!$primary_total || !$primary_available || !$primary_market || !$primary_market_a) {
                         DB::rollBack();
                         return false;
@@ -161,6 +169,14 @@ class PayController extends Controller
                     $secondary_available = ConsumerAccount::where('id', $secondary_distribution)->increment('available', $secondary_money);
                     $secondary_market = ConsumerAccount::where('id', $secondary_distribution)->increment('market', $secondary_money);
                     $secondary_market_b = ConsumerAccount::where('id', $secondary_distribution)->increment('market_b', $secondary_money);
+                    //插入分销记录表
+                    DistributionRecord::insert([
+                        'order_id' => $order['id'],
+                        'agency_uid' => $secondary_distribution,
+                        'agency_amount' => $secondary_money,
+                        'level' => '2',
+                        'create_time' => time()
+                    ]);
                     if(!$secondary_total || !$secondary_available || !$secondary_market || !$secondary_market_b) {
                         DB::rollBack();
                         return false;
@@ -173,22 +189,19 @@ class PayController extends Controller
                     $three_available = ConsumerAccount::where('id', $three_distribution)->increment('available', $three_money);
                     $three_market = ConsumerAccount::where('id', $three_distribution)->increment('market', $three_money);
                     $three_market_c = ConsumerAccount::where('id', $three_distribution)->increment('market_c', $three_money);
+                    //插入分销记录表
+                    DistributionRecord::insert([
+                        'order_id' => $order['id'],
+                        'agency_uid' => $three_distribution,
+                        'agency_amount' => $three_money,
+                        'level' => '3',
+                        'create_time' => time()
+                    ]);
                     if(!$three_total || !$three_available || !$three_market || !$three_market_c) {
                         DB::rollBack();
                         return false;
                     }
                 }
-                //插入分销记录表
-                DistributionRecord::insert([
-                    'order_id' => $order['id'],
-                    'primary_agency' => $primary_distribution,
-                    'primary_agency_amount' => ($primary_distribution == 0) ? '0.00' : $primary_money,
-                    'secondary_agency' => $secondary_distribution,
-                    'secondary_agency_amount' => ($secondary_money == 0) ? '0.00' : $secondary_money,
-                    'three_agency' => $three_distribution,
-                    'three_agency_amount' => ($three_money == 0) ? '0.00' : $three_money,
-                    'create_time' => time()
-                ]);
             }
 
             Log::info('success');
