@@ -66,7 +66,7 @@ class OrdersController extends Controller
                 $order_infos['goods'][$order_item->product_sku_id]['g_sku_id'] = $order_item->goods_sku->id;
                 $order_infos['goods'][$order_item->product_sku_id]['trad_channel'] = $order_item->goods_sku->trad_channel;
             }
-// die;
+
             // 把数据库中地址 json 转成数组
             $order->address = json_decode($order->address, true);
 
@@ -101,7 +101,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * 获取订单数据
+     * 获取订单数据列表
      *
      * @return Grid
      */
@@ -114,7 +114,6 @@ class OrdersController extends Controller
                 return Consumer::where('id', $value)->value('real_name');
             });
 
-            $grid->extra('其他额外的数据');
             $grid->create_time('下单时间')->display(function ($value) {
                 return date("Y-m-d H:i:s", $value);
             });
@@ -131,6 +130,15 @@ class OrdersController extends Controller
 
             $grid->paid_time('支付时间')->display(function ($value) {
                 return date("Y-m-d H:i:s", $value);
+            });
+
+            // 禁用新增按钮
+            $grid->disableCreateButton();
+
+            // 禁用编辑和删除
+            $grid->actions(function ($actions) {
+                $actions->disableDelete();
+                $actions->disableEdit();              
             });
 
             $grid->tools(function ($tools) {
