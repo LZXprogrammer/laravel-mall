@@ -62,6 +62,7 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/bankEdit', 'UserController@editBank')->middleware('mobile');
         Route::post('/bankDel', 'UserController@delBank')->middleware('id');
         Route::get('/listsUser', 'UsersListController@index')->middleware('level');
+        Route::post('/listsTrade', 'UsersListController@trade');
     });
     
     // 购物车

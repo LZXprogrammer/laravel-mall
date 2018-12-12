@@ -146,7 +146,7 @@ class PayController extends Controller
                 //一级级分销用户金额修改
                 if($primary_distribution != 0) {
                     $primary_total = ConsumerAccount::where('id', $primary_distribution)->increment('total', $primary_money);
-                    $primary_available = ConsumerAccount::where('id', $primary_distribution)->increment('available', $primary_money);
+                    $primary_available = ConsumerAccount::where('id', $primary_distribution)->increment('freeze', $primary_money);
                     $primary_market = ConsumerAccount::where('id', $primary_distribution)->increment('market', $primary_money);
                     $primary_market_a = ConsumerAccount::where('id', $primary_distribution)->increment('market_a', $primary_money);
                     //插入分销记录表
@@ -166,7 +166,7 @@ class PayController extends Controller
                 //二级分销用户金额修改
                 if($secondary_distribution != 0) {
                     $secondary_total = ConsumerAccount::where('id', $secondary_distribution)->increment('total', $secondary_money);
-                    $secondary_available = ConsumerAccount::where('id', $secondary_distribution)->increment('available', $secondary_money);
+                    $secondary_available = ConsumerAccount::where('id', $secondary_distribution)->increment('freeze', $secondary_money);
                     $secondary_market = ConsumerAccount::where('id', $secondary_distribution)->increment('market', $secondary_money);
                     $secondary_market_b = ConsumerAccount::where('id', $secondary_distribution)->increment('market_b', $secondary_money);
                     //插入分销记录表
@@ -186,7 +186,7 @@ class PayController extends Controller
                 //三级分销用户金额修改
                 if($three_distribution != 0) {
                     $three_total = ConsumerAccount::where('id', $three_distribution)->increment('total', $three_money);
-                    $three_available = ConsumerAccount::where('id', $three_distribution)->increment('available', $three_money);
+                    $three_available = ConsumerAccount::where('id', $three_distribution)->increment('freeze', $three_money);
                     $three_market = ConsumerAccount::where('id', $three_distribution)->increment('market', $three_money);
                     $three_market_c = ConsumerAccount::where('id', $three_distribution)->increment('market_c', $three_money);
                     //插入分销记录表

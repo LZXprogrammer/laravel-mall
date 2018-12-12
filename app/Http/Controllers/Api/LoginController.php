@@ -163,6 +163,20 @@ class LoginController extends Controller
         ];
         $account = ConsumerAccount::create($u_account);
 
+        //更新上级用户的信息
+        if($level_a != 0) {
+            Consumer::where('id', $level_a)->increment('total_users');
+            Consumer::where('id', $level_a)->increment('membership_a');
+        }
+        if($level_b != 0) {
+            Consumer::where('id', $level_b)->increment('total_users');
+            Consumer::where('id', $level_b)->increment('membership_b');
+        }
+        if($level_c != 0) {
+            Consumer::where('id', $level_c)->increment('total_users');
+            Consumer::where('id', $level_c)->increment('membership_c');
+        }
+
         //更改信息状态
         $u_sms = Message::where(['mobile' => $mobile, 'code' => $code])->update(['is_use' => '1']);
 
