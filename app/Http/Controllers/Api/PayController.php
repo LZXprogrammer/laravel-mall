@@ -10,7 +10,7 @@ use App\Models\Consumer;
 use App\Models\ConsumerAccount;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Yansongda\Supports\Log;
+use Illuminate\Support\Facades\Log;
 
 class PayController extends Controller
 {
@@ -34,11 +34,9 @@ class PayController extends Controller
         }
         //生成请求数据
         $request_data = [
-            'body'         => $order['body'],
             'subject'      => 'POS支付商城',
             'out_trade_no' => $order['no'],
             'total_amount' => $order['total_amount'],
-            'goods_type'   => '1',
         ];
         //发送请求
         return app('alipay')->wap($request_data);
@@ -56,13 +54,14 @@ class PayController extends Controller
     {
         $data = app('alipay')->verify();
         //记录日志
-        Log::info('Alipay notify', json_encode($data->all()));
+        Log::info($data->all());
 
         //支付宝返回数据校验
         $info = $data->all();
-        Log::info('Alipay notify', $info['trade_status']);
+        Log::info('Alipay notify', ['trade_status'=>$info['trade_status'],'out_trade_no'=>$info['out_trade_no'],'trade_no'=>$info['trade_no']]);
         if($info['trade_status'] == 'TRADE_SUCCESS') {
             $this->successfulOrder($info['out_trade_no'], $info['trade_no'], 'alipay');
+            
         }
     }
 
@@ -96,8 +95,10 @@ class PayController extends Controller
     }
 
     private function successfulOrder($out_trade_no, $trade_no, $type) {
+        Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
-        if(!empty($out_trade_no) && $order['pay_status'] == 0 && $order['closed'] == 0) {
+        Log::info($order);
+        if(!empty($order)) {
             //开始订单支付后操作
 
             //获取用户信息
@@ -119,6 +120,7 @@ class PayController extends Controller
                 'pay_status' => '1',
             ];
             $os = Order::where('id', $order['id'])->update($update);
+            Log::info($os);
             if(!$os) {
                 DB::rollBack();
                 die;
@@ -170,7 +172,7 @@ class PayController extends Controller
                     die;
                 }
             }
-
+            Log::info('success notify');
             DB::commit();
         }
     }
