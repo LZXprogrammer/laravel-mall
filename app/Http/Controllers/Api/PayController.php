@@ -54,7 +54,7 @@ class PayController extends Controller
     {
         $data = app('alipay')->verify();
         //记录日志
-        Log::info('Alipay notify', json_encode($data->all()));
+        \Log::debug('Alipay notify', $data->all());
 
         //支付宝返回数据校验
         $info = $data->all();
