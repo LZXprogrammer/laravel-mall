@@ -182,11 +182,11 @@ class PayController extends Controller
                 DistributionRecord::insert([
                     'order_id' => $order['id'],
                     'primary_agency' => $primary_distribution,
-                    'primary_agency_amount' => $primary_money,
+                    'primary_agency_amount' => ($primary_distribution == 0) ? '0.00' : $primary_money,
                     'secondary_agency' => $secondary_distribution,
-                    'secondary_agency_amount' => $secondary_money,
+                    'secondary_agency_amount' => ($secondary_money == 0) ? '0.00' : $secondary_money,
                     'three_agency' => $three_distribution,
-                    'three_agency_amount' => $three_money,
+                    'three_agency_amount' => ($three_money == 0) ? '0.00' : $three_money,
                     'create_time' => time()
                 ]);
             }
