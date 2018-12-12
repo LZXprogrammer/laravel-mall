@@ -10,7 +10,7 @@ use App\Models\Consumer;
 use App\Models\ConsumerAccount;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Yansongda\Supports\Log;
+use Illuminate\Support\Facades\Log;
 
 class PayController extends Controller
 {
