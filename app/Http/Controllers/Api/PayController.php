@@ -96,7 +96,8 @@ class PayController extends Controller
     private function successfulOrder($out_trade_no, $trade_no, $type) {
         Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
-        if(!empty($out_trade_no) && $order['pay_status'] == 0 && $order['closed'] == 0) {
+        Log::info($order);
+        if(!empty($order)) {
             //开始订单支付后操作
 
             //获取用户信息
