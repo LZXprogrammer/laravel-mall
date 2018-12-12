@@ -8,6 +8,7 @@ use App\Models\Good;
 use App\Models\GoodSku;
 use App\Models\Consumer;
 use App\Models\ConsumerAccount;
+use App\Models\DistributionRecord;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -60,11 +61,12 @@ class PayController extends Controller
         $info = $data->all();
         Log::info('Alipay notify', ['trade_status'=>$info['trade_status'],'out_trade_no'=>$info['out_trade_no'],'trade_no'=>$info['trade_no']]);
         if($info['trade_status'] == 'TRADE_SUCCESS') {
-            $this->successfulOrder($info['out_trade_no'], $info['trade_no'], 'alipay');
-            
+            $order = $this->successfulOrder($info['out_trade_no'], $info['trade_no'], 'alipay');
+            if($order) {
+                return 'SUCCESS';
+            }
         }
     }
-
 
     //校验用户是否存在
     private function checkOrder($order_id) {
@@ -94,6 +96,7 @@ class PayController extends Controller
         return $order;
     }
 
+    //处理订单
     private function successfulOrder($out_trade_no, $trade_no, $type) {
         Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
@@ -120,60 +123,77 @@ class PayController extends Controller
                 'pay_status' => '1',
             ];
             $os = Order::where('id', $order['id'])->update($update);
-            Log::info($os);
+
             if(!$os) {
                 DB::rollBack();
-                die;
+                return false;
             }
+            //判断订单子表是否存在
+            if(!empty($order['orderitems'])) {
+                //处理返利
+                $primary_money = $secondary_money = $three_money = 0;
 
-            $primary_money = $secondary_money = $three_money = 0;
-
-            //处理返利
-            foreach ($order['orderitems'] as $k => $v) {
-                $info = GoodSku::where('id', $v['product_sku_id'])->with('good')->first()->toArray();
-                //计算分销用户自增金额
-                $primary_money += $info['market_a'] * $v['amount'];
-                $secondary_money += $info['market_b'] * $v['amount'];
-                $three_money += $info['market_c'] * $v['amount'];
-            }
-
-            //一级级分销用户金额修改
-            if($primary_distribution != 0) {
-                $primary_total = ConsumerAccount::where('id', $primary_distribution)->increment('total', $primary_money);
-                $primary_available = ConsumerAccount::where('id', $primary_distribution)->increment('available', $primary_money);
-                $primary_market = ConsumerAccount::where('id', $primary_distribution)->increment('market', $primary_money);
-                $primary_market_a = ConsumerAccount::where('id', $primary_distribution)->increment('market_a', $primary_money);
-                if(!$primary_total || !$primary_available || !$primary_market || !$primary_market_a) {
-                    DB::rollBack();
-                    die;
+                foreach ($order['orderitems'] as $k => $v) {
+                    $info = GoodSku::where('id', $v['product_sku_id'])->with('good')->first()->toArray();
+                    if(!empty($info)) {
+                        //计算分销用户自增金额
+                        $primary_money += $info['market_a'] * $v['amount'];
+                        $secondary_money += $info['market_b'] * $v['amount'];
+                        $three_money += $info['market_c'] * $v['amount'];
+                    }
                 }
+
+                //一级级分销用户金额修改
+                if($primary_distribution != 0) {
+                    $primary_total = ConsumerAccount::where('id', $primary_distribution)->increment('total', $primary_money);
+                    $primary_available = ConsumerAccount::where('id', $primary_distribution)->increment('available', $primary_money);
+                    $primary_market = ConsumerAccount::where('id', $primary_distribution)->increment('market', $primary_money);
+                    $primary_market_a = ConsumerAccount::where('id', $primary_distribution)->increment('market_a', $primary_money);
+                    if(!$primary_total || !$primary_available || !$primary_market || !$primary_market_a) {
+                        DB::rollBack();
+                        return false;
+                    }
+                }
+
+                //二级分销用户金额修改
+                if($secondary_distribution != 0) {
+                    $secondary_total = ConsumerAccount::where('id', $secondary_distribution)->increment('total', $secondary_money);
+                    $secondary_available = ConsumerAccount::where('id', $secondary_distribution)->increment('available', $secondary_money);
+                    $secondary_market = ConsumerAccount::where('id', $secondary_distribution)->increment('market', $secondary_money);
+                    $secondary_market_b = ConsumerAccount::where('id', $secondary_distribution)->increment('market_b', $secondary_money);
+                    if(!$secondary_total || !$secondary_available || !$secondary_market || !$secondary_market_b) {
+                        DB::rollBack();
+                        return false;
+                    }
+                }
+
+                //三级分销用户金额修改
+                if($three_distribution != 0) {
+                    $three_total = ConsumerAccount::where('id', $three_distribution)->increment('total', $three_money);
+                    $three_available = ConsumerAccount::where('id', $three_distribution)->increment('available', $three_money);
+                    $three_market = ConsumerAccount::where('id', $three_distribution)->increment('market', $three_money);
+                    $three_market_c = ConsumerAccount::where('id', $three_distribution)->increment('market_c', $three_money);
+                    if(!$three_total || !$three_available || !$three_market || !$three_market_c) {
+                        DB::rollBack();
+                        return false;
+                    }
+                }
+                //插入分销记录表
+                DistributionRecord::insert([
+                    'order_id' => $order['id'],
+                    'primary_agency' => $primary_distribution,
+                    'primary_agency_amount' => ($primary_distribution == 0) ? '0.00' : $primary_money,
+                    'secondary_agency' => $secondary_distribution,
+                    'secondary_agency_amount' => ($secondary_money == 0) ? '0.00' : $secondary_money,
+                    'three_agency' => $three_distribution,
+                    'three_agency_amount' => ($three_money == 0) ? '0.00' : $three_money,
+                    'create_time' => time()
+                ]);
             }
 
-            //二级分销用户金额修改
-            if($secondary_distribution != 0) {
-                $secondary_total = ConsumerAccount::where('id', $secondary_distribution)->increment('total', $secondary_money);
-                $secondary_available = ConsumerAccount::where('id', $secondary_distribution)->increment('available', $secondary_money);
-                $secondary_market = ConsumerAccount::where('id', $secondary_distribution)->increment('market', $secondary_money);
-                $secondary_market_b = ConsumerAccount::where('id', $secondary_distribution)->increment('market_b', $secondary_money);
-                if(!$secondary_total || !$secondary_available || !$secondary_market || !$secondary_market_b) {
-                    DB::rollBack();
-                    die;
-                }
-            }
-
-            //三级分销用户金额修改
-            if($three_distribution != 0) {
-                $three_total = ConsumerAccount::where('id', $three_distribution)->increment('total', $three_money);
-                $three_available = ConsumerAccount::where('id', $three_distribution)->increment('available', $three_money);
-                $three_market = ConsumerAccount::where('id', $three_distribution)->increment('market', $three_money);
-                $three_market_c = ConsumerAccount::where('id', $three_distribution)->increment('market_c', $three_money);
-                if(!$three_total || !$three_available || !$three_market || !$three_market_c) {
-                    DB::rollBack();
-                    die;
-                }
-            }
-            Log::info('success notify');
+            Log::info('success');
             DB::commit();
+            return true;
         }
     }
 }
