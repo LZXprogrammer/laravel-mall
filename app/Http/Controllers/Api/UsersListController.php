@@ -195,7 +195,7 @@ class UsersListController extends Controller
         //获取默认每页数量
         $page = Config::get('systems.defaultPage');
         //查询数据
-        $list = ImportOrder::whereIn('agency_uid', $uid)
+        $list = ImportDistributionRecord::whereIn('agency_uid', $uid)
             ->when($beginTime, function ($query) use ($beginTime) {
                 return $query->where('create_time', '>=', $beginTime);
             })->when($endTime, function ($query) use ($endTime) {
