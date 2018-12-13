@@ -151,23 +151,23 @@ class UsersListController extends Controller
         //查询用户三级用户ID
         $uid = $this->queryUsers();
 
-        //总交易订单
-        $info['total_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->count();
+        //总收益
+        $info['total_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->sum('agency_amount');
 
         //获取昨日起始时间戳和结束时间戳
         $beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
         $endYesterday=mktime(0,0,0,date('m'),date('d'),date('Y'))-1;
-        $info['yesterday_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginYesterday)->where('create_time', '<=', $endYesterday)->count();
+        $info['yesterday_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginYesterday)->where('create_time', '<=', $endYesterday)->sum('agency_amount');
 
         //获取本月起始时间戳和结束时间戳
         $beginThisMonth=mktime(0,0,0,date('m'),1,date('Y'));
         $endThisMonth=mktime(23,59,59,date('m'),date('t'),date('Y'));
-        $info['this_month_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginThisMonth)->where('create_time', '<=', $endThisMonth)->count();
+        $info['this_month_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginThisMonth)->where('create_time', '<=', $endThisMonth)->sum('agency_amount');
 
         //获取三个月起始时间戳和结束时间戳
         $beginThreeMonth=mktime(0,0,0,date('m')-2,1,date('Y'));
         $endThreeMonth=mktime(23,59,59,date('m'),date('t'),date('Y'));
-        $info['three_month_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginThreeMonth)->where('create_time', '<=', $endThreeMonth)->count();
+        $info['three_month_volume'] = ImportDistributionRecord::whereIn('agency_uid', $uid)->where('create_time', '>=', $beginThreeMonth)->where('create_time', '<=', $endThreeMonth)->sum('agency_amount');
 
         //返回信息
         $info['account'] = $account;
@@ -195,7 +195,7 @@ class UsersListController extends Controller
         //获取默认每页数量
         $page = Config::get('systems.defaultPage');
         //查询数据
-        $list = ImportOrder::whereIn('agency_uid', $uid)
+        $list = ImportDistributionRecord::whereIn('agency_uid', $uid)
             ->when($beginTime, function ($query) use ($beginTime) {
                 return $query->where('create_time', '>=', $beginTime);
             })->when($endTime, function ($query) use ($endTime) {
@@ -209,7 +209,7 @@ class UsersListController extends Controller
 
         $info['list'] = $list['data'];
         $info['current_page'] = $list['current_page'];
-        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $info];
     }
 
     /**
