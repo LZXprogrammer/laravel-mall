@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Good;
+use App\Models\GoodCategory;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
@@ -81,6 +82,27 @@ class GoodsController extends Controller
                 return ($value==1) ? '是' : '否';
             });
             $grid->desc('排序')->sortable();
+
+            // 数据查询过滤
+            $grid->filter(function($filter){
+
+                // 去掉默认的id过滤器
+                // $filter->disableIdFilter();
+            
+                // 添加字段过滤器
+                $filter->equal('serial_number', '产品序列号')->placeholder('请输入完整产品序列号');
+                $filter->like('name', '产品名称');
+                $filter->like('vender', '厂家');
+
+                // 商品类别
+                $types = [];
+                $category = GoodCategory::where('is_del', 1)->get();
+                foreach ($category->toArray() as $key => $value) {
+                    $types[''] = 'All';
+                    $types[$value['id']] = $value['name'];
+                }
+                $filter->equal('category', '产品类别')->radio($types);
+            });
 
             $grid->tools(function ($tools) {
                 // 禁用批量删除按钮

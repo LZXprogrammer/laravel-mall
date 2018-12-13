@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\CreditCard;
+use App\Models\CreditType;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
@@ -58,13 +59,33 @@ class CreditCardController extends Controller
         return Admin::grid(CreditCard::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->bank_name('所属银行');
-            $grid->credit_type()->name('模板名称');
+            $grid->credit_type()->name('信用卡类别');
             $grid->name('信用卡名称');
             $grid->create_time('添加时间')->display(function ($value) {
                 return date('Y-m-d H:i:s', $value);
             });
             $grid->actions(function ($actions) {
                 $actions->disableView();
+            });
+
+            // 数据查询过滤
+            $grid->filter(function($filter){
+
+                // 去掉默认的id过滤器
+                // $filter->disableIdFilter();
+            
+                // 添加字段过滤器
+                $filter->equal('bank_name', '所属银行')->placeholder('请输入完整所属银行');
+                $filter->like('name', '信用卡名称');
+
+                // 信用卡类别
+                $types = [];
+                $category = CreditType::where('is_del', 1)->where('is_enable', 1)->get();
+                foreach ($category->toArray() as $key => $value) {
+                    $types[''] = 'All';
+                    $types[$value['id']] = $value['name'];
+                }
+                $filter->equal('type', '信用卡分类')->radio($types);
             });
         });
     }

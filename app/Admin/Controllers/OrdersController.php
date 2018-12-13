@@ -143,8 +143,27 @@ class OrdersController extends Controller
                 // $filter->disableIdFilter();
             
                 // 添加字段过滤器
-                $filter->equal('no')->placeholder('请输入订单号');
-                $filter->date('create_time', '下单时间');
+                $filter->equal('no', '订单号')->placeholder('请输入订单号');
+                $filter->equal('payment_method', '支付方式')->radio([
+                    ''       => 'All',
+                    'wechat' => 'wechat',
+                    'alipay' => 'alipay',
+                ]);
+                $filter->equal('pay_status', '支付状态')->radio([
+                    '' => 'All',
+                    0  => '待付款',
+                    1  => '已付款(待发货)',
+                    3  => '已收货(待评价)', 
+                    4  => '已评价', 
+                    5  => '已退款',
+                ]);
+                $filter->group('total_amount', '总金额', function ($group) {
+                    $group->nlt('大于等于');
+                    $group->ngt('小于等于');
+                    $group->equal('等于');
+                });
+                // 设置datetime类型
+                // $filter->between('create_time', '下单时间')->datetime();
             });
 
             // 禁用新增按钮
