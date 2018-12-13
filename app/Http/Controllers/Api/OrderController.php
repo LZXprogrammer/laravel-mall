@@ -196,7 +196,7 @@ class OrderController extends Controller
         }
 
         if($info){
-            return ['code' => 1, 'message' => '下单成功', 'data' => $order_id];
+            return ['code' => 1, 'message' => '下单成功', 'out_trade_no' => $order['no']];
         }
     }
 
@@ -220,7 +220,7 @@ class OrderController extends Controller
         $order_id = Order::insertGetId($order);
 
         if($order_id){
-            return ['code' => 1, 'message' => '加入会员成功', 'data' => $order_id];
+            return ['code' => 1, 'message' => '加入会员成功', 'out_trade_no' => $order['no']];
         }
     }
 
