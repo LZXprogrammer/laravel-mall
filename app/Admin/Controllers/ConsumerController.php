@@ -85,6 +85,7 @@ class ConsumerController extends Controller
 
                 // 在这里添加字段过滤器
                 $filter->like('mobile', '用户账号');
+                $filter->like('nick_name', '用户昵称');
                 $filter->like('real_name', '真实姓名');
 
                 $filter->equal('create_time')->datetime();

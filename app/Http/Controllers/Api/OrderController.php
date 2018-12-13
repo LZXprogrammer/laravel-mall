@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 
 class OrderController extends Controller
 {
@@ -195,7 +196,31 @@ class OrderController extends Controller
         }
 
         if($info){
-            return ['code' => 1, 'message' => '下单成功', 'data' => ''];
+            return ['code' => 1, 'message' => '下单成功', 'data' => $order_id];
+        }
+    }
+
+    /**
+     * 加入会员 -- 提交订单
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function addMember(Request $request)
+    {
+        // 整合订单需要字段
+        $order = [
+            'no' => 'POS'.date('Ymd').substr(microtime(true),0,10),
+            'c_id' => $request->session()->get('uid'),
+            'total_amount' => config('pos.member_activation'),
+            'create_time' => time(),
+            'is_member_order' => 1, // 代表此订单是购买会员的订单
+        ];
+
+        // 订单表入库，并获取当前插入的 order_id
+        $order_id = Order::insertGetId($order);
+
+        if($order_id){
+            return ['code' => 1, 'message' => '加入会员成功', 'data' => $order_id];
         }
     }
 
