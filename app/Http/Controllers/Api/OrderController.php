@@ -137,6 +137,7 @@ class OrderController extends Controller
     /**
      * 确认订单 - 提交订单
      *
+     * @param  App\Helpers\common  getOutTradeNo 方法
      * @param  Json $request->g_sku = [{"g_id":1,"g_sku_id":3,"amount":1},{"g_id":2,"g_sku_id":4,"amount":2}]
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -170,7 +171,7 @@ class OrderController extends Controller
 
         // 整合订单需要字段
         $order = [
-            'no' => 'POS'.date('Ymd').substr(microtime(true),0,10),
+            'no' => getOutTradeNo('POS'),
             'address' => json_encode($address_arr),
             'c_id' => $request->session()->get('uid'),
             'total_amount' => $total_amount,
@@ -203,13 +204,14 @@ class OrderController extends Controller
     /**
      * 加入会员 -- 提交订单
      * 
+     * @param  App\Helpers\common  getOutTradeNo 方法
      * @param  \Illuminate\Http\Request  $request
      */
     public function addMember(Request $request)
     {
         // 整合订单需要字段
         $order = [
-            'no' => 'POS'.date('Ymd').substr(microtime(true),0,10),
+            'no' => getOutTradeNo('POS'),
             'c_id' => $request->session()->get('uid'),
             'total_amount' => config('pos.member_activation'),
             'create_time' => time(),

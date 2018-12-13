@@ -10,3 +10,9 @@ function getPromote( $length = 8)
 {
     return substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),0,$length);
 }
+
+// 生成订单号
+function getOutTradeNo($prefix = '')
+{
+    return $prefix.date('Ymd').substr(microtime(true),0,10);
+}
