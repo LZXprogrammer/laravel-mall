@@ -97,7 +97,7 @@ Route::group(['middleware' => 'user'], function () {
     //用户会员信息
     Route::group(['prefix' => 'members', 'namespace' => 'Api'], function () {
         Route::get('/listsUser', 'UsersListController@index')->middleware('level');
-        Route::get('/listsTrade', 'UsersListController@trade');
+        Route::get('/trades', 'UsersListController@trade');
         Route::get('/queryTrade', 'UsersListController@tradeQuery');
         Route::get('/dropDown', 'UsersListController@dropDown');
         Route::get('/earnings', 'UsersListController@earnings');
