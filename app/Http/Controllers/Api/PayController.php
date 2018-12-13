@@ -18,8 +18,8 @@ class PayController extends Controller
     /**
      * 支付宝支付
      *
-     * @param   order_id        string          订单ID
-     * @param           string          用户ID
+     * @param  string  order_id 订单ID
+     * @param  string  用户ID
      * @return \Illuminate\Http\Response
      */
     public function aliPay(Request $request)
@@ -31,7 +31,7 @@ class PayController extends Controller
         $order = $this->checkOrder($order_id);
 
         if($order == '订单不存在' || $order == '订单状态不正确') {
-            return ['code'=>'0', 'message'=>$order, 'data'=>''];
+            return ['code' => 0, 'message' => $order, 'data' => ''];
         }
         //生成请求数据
         $request_data = [
@@ -81,17 +81,6 @@ class PayController extends Controller
             return '订单状态不正确';
         }
         //获取信息
-        $g_id = [];
-        $body = '';
-        foreach ($order['orderitems'] as $k => $v) {
-            $g_id[] = $v['product_id'];
-        }
-
-        $good = Good::whereIn('id', $g_id)->select('name', 'serial_number')->get()->toArray();
-        foreach ($good as $k => $v) {
-            $body .= $v['name'].',';
-        }
-        $order['body'] = rtrim($body, ',');
 
         return $order;
     }
@@ -101,8 +90,49 @@ class PayController extends Controller
         Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
         Log::info($order);
+        
+        //开始订单支付后操作
         if(!empty($order)) {
-            //开始订单支付后操作
+            //开启事务
+            DB::beginTransaction();
+
+            // 处理加入会员订单状态
+            $member_update = [
+                'paid_time' => time(),
+                'payment_method' => $type,
+                'payment_no' => $trade_no,
+                'pay_status' => 3,
+            ];
+
+            //处理商品订单状态
+            $update = [
+                'paid_time' => time(),
+                'payment_method' => $type,
+                'payment_no' => $trade_no,
+                'pay_status' => 1,
+            ];
+
+            // 如果是加入会员的订单，那当前用户会员状态改为 已激活
+            if($order['is_member_order']){
+
+                $consumer = Consumer::where('id', $order['c_id'])->update(['is_active' => 1, 'active_time' => time()]);
+                $order_member = Order::where('id', $order['id'])->update($member_update);
+                // 两者都成功时提交事务
+                if($consumer && $order_member){
+                    DB::commit();
+                }else{
+                    DB::rollBack();
+                }
+                return false;
+
+            }else{
+                $os = Order::where('id', $order['id'])->update($update);
+            }
+
+            if(!$os) {
+                DB::rollBack();
+                return false;
+            }
 
             //获取用户信息
             $user = Consumer::where('id', $order['c_id'])->first()->toArray();
@@ -112,22 +142,6 @@ class PayController extends Controller
             $secondary_distribution = $user['level_b'];
             $three_distribution = $user['level_c'];
 
-            //开启事务
-            DB::beginTransaction();
-
-            //处理订单状态
-            $update = [
-                'paid_time' => time(),
-                'payment_method' => $type,
-                'payment_no' => $trade_no,
-                'pay_status' => '1',
-            ];
-            $os = Order::where('id', $order['id'])->update($update);
-
-            if(!$os) {
-                DB::rollBack();
-                return false;
-            }
             //判断订单子表是否存在
             if(!empty($order['orderitems'])) {
                 //处理返利

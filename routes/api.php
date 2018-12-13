@@ -78,7 +78,7 @@ Route::group(['middleware' => 'user'], function () {
         Route::post('/goods/buynow', 'OrderController@orderGoodsBuyNow');
         Route::post('/goods/buycart', 'OrderController@orderGoodsBuyCart')->middleware('orderGoods');
         Route::post('/submit', 'OrderController@orderSubmit')->middleware('orderSubmit');
-
+        Route::post('/add/member', 'OrderController@addMember');
     });
 
     // 个人中心 -- 我的订单

@@ -13,8 +13,9 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'no', 'c_id', 'address', 'total_amount', 'remark', 'paid_time', 'payment_method', 'payment_no', 'pay_status',
-        'refund_status', 'refund_no', 'closed', 'reviewed', 'ship_status', 'ship_data', 'extra', 'create_time', 'closed_reason', 'is_del'
+        'id', 'no', 'c_id', 'address', 'total_amount', 'remark', 'paid_time', 'payment_method', 'payment_no', 
+        'pay_status', 'refund_status', 'refund_no', 'closed', 'reviewed', 'ship_status', 'ship_data', 'extra', 
+        'create_time', 'delivery_time', 'clinch_time', 'closed_reason', 'is_del', 'is_member_order'
     ];
 
     // 表示 create_time 是一个日期字段
