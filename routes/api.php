@@ -98,10 +98,10 @@ Route::group(['middleware' => 'user'], function () {
     Route::group(['prefix' => 'members', 'namespace' => 'Api'], function () {
         Route::get('/listsUser', 'UsersListController@index')->middleware('level');
         Route::get('/trades', 'UsersListController@trade');
-        Route::get('/queryTrade', 'UsersListController@tradeQuery');
+        Route::get('/queryTrade', 'UsersListController@tradeQuery')->middleware('query');
         Route::get('/dropDown', 'UsersListController@dropDown');
         Route::get('/earnings', 'UsersListController@earnings');
-        Route::get('/queryEarnings', 'UsersListController@earningsQuery');
+        Route::get('/queryEarnings', 'UsersListController@earningsQuery')->middleware('query');
     });
 });
 
