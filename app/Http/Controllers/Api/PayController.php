@@ -43,6 +43,7 @@ class PayController extends Controller
         return app('alipay')->wap($request_data);
     }
 
+    // 客户端回调 —— 同步回调
     public function alipayReturn()
     {
         // 校验提交的参数是否合法
@@ -50,7 +51,7 @@ class PayController extends Controller
         return $data;
     }
 
-    //服务器端回调
+    //服务器端回调 —— 异步回调
     public function alipayNotify()
     {
         $data = app('alipay')->verify();
@@ -112,7 +113,7 @@ class PayController extends Controller
                 'pay_status' => 1,
             ];
 
-            // 如果是加入会员的订单，那当前用户会员状态改为 已激活
+            // 如果是加入会员的订单，那当前用户会员状态改为 已激活，订单状态直接改成 已完成=3 
             if($order['is_member_order']){
 
                 $consumer = Consumer::where('id', $order['c_id'])->update(['is_active' => 1, 'active_time' => time()]);
@@ -126,6 +127,7 @@ class PayController extends Controller
                 return false;
 
             }else{
+                // 商品订单更改
                 $os = Order::where('id', $order['id'])->update($update);
             }
 
