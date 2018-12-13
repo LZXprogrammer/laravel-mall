@@ -27,8 +27,8 @@ class CheckQuery
         if(!empty($request->level) && !is_numeric($request->level) && !in_array($request->level, ['1', '2', '3'])) {
             return response()->json(['code' => 0, 'message' => '会员等级不符合规则', 'data' => '']);
         }
-        if(!empty($request->mobile) || !preg_match('/^1[3-9]\d{9}$/',$request->mobile)) {
-            return response()->json(['code' => 0, 'message' => '用户手机号不能为空', 'data' => '']);
+        if(!empty($request->mobile) && !preg_match('/^1[3-9]\d{9}$/',$request->mobile)) {
+            return response()->json(['code' => 0, 'message' => '用户手机号不符合规则', 'data' => '']);
         }
 
         return $next($request);
