@@ -209,7 +209,7 @@ class UsersListController extends Controller
 
         $info['list'] = $list['data'];
         $info['current_page'] = $list['current_page'];
-        return ['code' => 1, 'message' => '请求成功', 'data' => ''];
+        return ['code' => 1, 'message' => '请求成功', 'data' => $info];
     }
 
     /**
