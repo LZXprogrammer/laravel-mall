@@ -76,6 +76,7 @@ class Kernel extends HttpKernel
         'orderGoods' => \App\Http\Middleware\CheckOrderGoods::class,
         'level' => \App\Http\Middleware\CheckLevel::class,
         'id' => \App\Http\Middleware\CheckId::class,
+        'query' => \App\Http\Middleware\CheckQuery::class,
     ];
 
     /**
