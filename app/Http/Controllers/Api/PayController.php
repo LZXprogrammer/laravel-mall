@@ -31,7 +31,7 @@ class PayController extends Controller
         $order = $this->checkOrder($order_id);
 
         if($order == '订单不存在' || $order == '订单状态不正确') {
-            return ['code'=>'0', 'message'=>$order, 'data'=>''];
+            return ['code'=>0, 'message'=>$order, 'data'=>''];
         }
         //生成请求数据
         $request_data = [
@@ -100,7 +100,7 @@ class PayController extends Controller
     private function successfulOrder($out_trade_no, $trade_no, $type) {
         Log::info('successfulOrder notify', ['trade_status'=>$out_trade_no,'out_trade_no'=>$trade_no,'trade_no'=>$type]);
         $order = Order::where('no', $out_trade_no)->with('orderitems')->first()->toArray();
-        Log::info($order);
+
         if(!empty($order)) {
             //开始订单支付后操作
 
